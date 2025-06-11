@@ -1,0 +1,19 @@
+
+<div class="row">
+  @for (p of productos.content; track $index) {
+    <div class="col-md-3">
+  <div class="card my-3 bg-light">
+    <a [routerLink]="['/user/productos']">
+      <img [src]="p.imageUrl" class="card-img-top img-fluid" [alt]="p.nombre">
+    </a>
+    <div class="card-body">
+      <h5 class="card-title">{{ p.nombre }}</h5>
+      <p class="precio">{{ p.precio | currency: 'EUR':'symbol':'1.2-2' }}</p>
+      <button class="btn btn-success">Añadir a mi cesta</button>
+    </div>
+  </div>
+</div>
+
+    }  
+</div>
+
