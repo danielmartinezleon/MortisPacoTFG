@@ -101,7 +101,7 @@ class UsuarioServiceTest {
     @Test
     void testEditUser() {
         UUID userId = usuario.getId();
-        EditUserCmd editCmd = new EditUserCmd("Updated", "User", "updated@example.com", "newpassword", "New Address");
+        EditUserCmd editCmd = new EditUserCmd("Updated", "User", "updated@example.com", "newpassword", "New Address", "New Address");
         when(usuarioRepository.findById(userId)).thenReturn(Optional.of(usuario));
         when(usuarioRepository.save(any(Usuario.class))).thenReturn(usuario);
 
