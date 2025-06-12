@@ -66,6 +66,8 @@ public class ProductoService {
         return productoRepository.findAll(pageable);
     }
 
+
+
     @Transactional
     public Optional<Producto> editProducto(UUID id, EditProductoCmd cmd, MultipartFile file) {
         return productoRepository.findById(id).map(producto -> {

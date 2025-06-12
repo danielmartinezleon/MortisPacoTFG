@@ -74,6 +74,7 @@ public class ProductoController {
         return ResponseEntity.ok(productosDto);
     }
 
+
     @Operation(summary = "Obtener un producto por su ID")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Producto encontrado correctamente",

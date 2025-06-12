@@ -1,0 +1,129 @@
+<header class="navbar navbar-expand-lg navbar-dark bg-danger menu">
+  <nav class="container-fluid position-relative">
+    <a class="navbar-brand position-absolute logo" routerLink="/">
+      <img
+        src="/img/Paco.png"
+        alt="logo"
+        class="d-inline-block align-text-top"
+      />
+    </a>
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarNav"
+      aria-controls="navbarNav"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div
+      class="collapse navbar-collapse d-flex flex-row items-menu"
+      id="navbarNav"
+    >
+      <ul class="navbar-nav position-menu">
+        <li class="nav-item">
+          <div class="dropdown">
+            <button
+              class="btn btn-danger dropdown-toggle"
+              type="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              <img src="/img/espadas.png" alt="Armas" class="me-1" />
+              Armas
+            </button>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" [routerLink]="['/productos/categoria', 'Melee']">Melee</a></li>
+              <li><a class="dropdown-item" [routerLink]="['/productos/categoria', 'Distancia']">Distancia</a></li>
+            </ul>
+          </div>
+        </li>
+        <li class="nav-item">
+          <div class="dropdown">
+            <button
+              class="btn btn-danger dropdown-toggle"
+              type="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              <img src="/img/casco.png" alt="Armaduras" class="me-1" />
+              Armaduras
+            </button>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" [routerLink]="['/productos/categoria', 'Metal']">Metal</a></li>
+              <li><a class="dropdown-item" [routerLink]="['/productos/categoria', 'Cuero']">Cuero</a></li>
+            </ul>
+          </div>
+        </li>
+        <div class="menu-item-right ms-auto d-flex flex-row">
+          @if(userRole === null) {
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/login">Login</a>
+          </li>
+          }@else if (userRole === 'USER') {
+          <div class="dropdown">
+            <a
+              class="btn btn-secondary dropdown-toggle"
+              role="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              Perfil
+            </a>
+
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="#">Mi perfil</a></li>
+              <li>
+                <a class="dropdown-item" href="#">Historial de pedidos</a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="#" (click)="logout()"
+                  >Cerrar sesión</a
+                >
+              </li>
+            </ul>
+          </div>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/carrito">Carrito</a>
+          </li>
+          }@else if (userRole === 'ADMIN') {
+          <div class="dropdown">
+            <a
+              class="btn btn-secondary dropdown-toggle"
+              role="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              Admin
+            </a>
+
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="#">Mi perfil</a></li>
+              <li>
+                <a class="dropdown-item" href="#">Historial de pedidos</a>
+              </li>
+              <li><a class="dropdown-item" href="#">Descuentos</a></li>
+              <li>
+                <a class="dropdown-item" href="#" (click)="logout()"
+                  >Cerrar sesión</a
+                >
+              </li>
+            </ul>
+          </div>
+          }
+        </div>
+      </ul>
+    </div>
+  </nav>
+</header>
+
+<!--<nav class="navbar">
+  <a routerLink="/">Inicio</a>
+  <a routerLink="/productos">Productos</a>
+  <a routerLink="/categorias">Categorías</a>
+  <a routerLink="/carrito">Carrito</a>
+  <a routerLink="/login">Login</a>
+  <a routerLink="/registro">Registro</a>
+</nav>-->
