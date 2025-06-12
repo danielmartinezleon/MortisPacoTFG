@@ -66,7 +66,7 @@ class UsuarioServiceTest {
 
     @Test
     void testCreateUser() throws IOException {
-        CreateUserCmd cmd = new CreateUserCmd("testuser", "password", "test@example.com", "Test", "User", "Address");
+        CreateUserCmd cmd = new CreateUserCmd("testuser", "password", "test@example.com", "Test", "User", "Address", "Address");
         when(usuarioRepository.save(any(Usuario.class))).thenReturn(usuario);
         when(passwordEncoder.encode(anyString())).thenReturn("encodedPassword");
 
