@@ -45,6 +45,9 @@ import { ProductoDetailsComponent } from './components/producto-details/producto
     ProductoFormComponent,
     CategoriaListComponent,
     ProductoDetailsComponent
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
   ],
   imports: [

@@ -62,7 +62,11 @@ public class SecurityConfig {
         http.authorizeHttpRequests(authz -> authz
                 .requestMatchers(HttpMethod.POST, "/usuario/auth/**", "/usuario/auth/refresh/token", "/error", "/usuario/activate/account/").permitAll()
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
                 .requestMatchers("/h2-console/**", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
+=======
+                .requestMatchers("/h2-console/**", "/swagger-ui/**", "/v3/api-docs/**", "/producto/lista", "/download/**", "/producto/buscar/**").permitAll()
+>>>>>>> Stashed changes
 =======
                 .requestMatchers("/h2-console/**", "/swagger-ui/**", "/v3/api-docs/**", "/producto/lista", "/download/**", "/producto/buscar/**").permitAll()
 >>>>>>> Stashed changes
