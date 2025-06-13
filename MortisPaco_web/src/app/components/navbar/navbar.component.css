@@ -12,6 +12,7 @@
 
 .menu{
     height: 75px;
+    z-index: 1000;
 }
 
 .position-menu {
