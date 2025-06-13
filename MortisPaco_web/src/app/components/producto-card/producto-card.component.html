@@ -1,0 +1,12 @@
+<div class="col-md-3">
+  <div class="card my-3 bg-light">
+    <a [routerLink]="['/user/productos']">
+      <img [src]="producto.imageUrl" class="card-img-top img-fluid" [alt]="producto.nombre">
+    </a>
+    <div class="card-body">
+      <h5 class="card-title">{{ producto.nombre }}</h5>
+      <p class="precio">{{ producto.precio | currency: 'EUR':'symbol':'1.2-2' }}</p>
+      <button class="btn btn-success">Añadir a mi cesta</button>
+    </div>
+  </div>
+</div>

@@ -1,9 +1,13 @@
 import { NgModule } from '@angular/core';
+import { HomeComponent } from './components/home/home.component';
+import { LoginComponent } from './components/auth/login/login.component';
+import { RegisterComponent } from './components/auth/register/register.component';
+import { ProductoListComponent } from './components/producto-list/producto-list.component';
+import { ProductoFormComponent } from './components/producto-form/producto-form.component';
+import { CategoriaListComponent } from './components/categoria-list/categoria-list.component';
+import { CarritoComponent } from './components/carrito/carrito.component';
 import { RouterModule, Routes } from '@angular/router';
 
-<<<<<<< Updated upstream
-const routes: Routes = [];
-=======
 const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'login', component: LoginComponent },
@@ -14,7 +18,6 @@ const routes: Routes = [
   { path: 'categorias', component: CategoriaListComponent },
   { path: 'carrito', component: CarritoComponent }
 ];
->>>>>>> Stashed changes
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],

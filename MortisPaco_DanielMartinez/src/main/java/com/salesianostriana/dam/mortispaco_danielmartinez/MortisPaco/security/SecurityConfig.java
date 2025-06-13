@@ -18,6 +18,11 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.List;
 
 @EnableWebSecurity
 @Configuration
@@ -61,15 +66,7 @@ public class SecurityConfig {
 
         http.authorizeHttpRequests(authz -> authz
                 .requestMatchers(HttpMethod.POST, "/usuario/auth/**", "/usuario/auth/refresh/token", "/error", "/usuario/activate/account/").permitAll()
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-                .requestMatchers("/h2-console/**", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
-=======
-                .requestMatchers("/h2-console/**", "/swagger-ui/**", "/v3/api-docs/**", "/producto/lista", "/download/**", "/producto/buscar/**").permitAll()
->>>>>>> Stashed changes
-=======
-                .requestMatchers("/h2-console/**", "/swagger-ui/**", "/v3/api-docs/**", "/producto/lista", "/download/**", "/producto/buscar/**").permitAll()
->>>>>>> Stashed changes
+                .requestMatchers("/h2-console/**", "/swagger-ui/**", "/v3/api-docs/**", "/producto/lista", "producto/buscar/**").permitAll()
                 .requestMatchers("/usuario/editar/**", "/producto/buscar/**", "/usuario/historial/**", "/producto/**").authenticated()
 
                 .requestMatchers(HttpMethod.GET, "/carrito/**").hasRole("USER")
@@ -86,5 +83,22 @@ public class SecurityConfig {
         http.headers(headers -> headers.frameOptions(frameOptions -> frameOptions.disable()));
 
         return http.build();
+    }
+
+    @Bean
+    CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(List.of("http://localhost:4200"));
+        //configuration.setAllowedOriginPatterns(List.of("http://localhost:4200"));
+
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        configuration.setAllowCredentials(true);
+        configuration.setAllowedHeaders(List.of("*"));
+
+        UrlBasedCorsConfigurationSource urlBasedCorsConfigurationSource = new UrlBasedCorsConfigurationSource();
+
+        urlBasedCorsConfigurationSource.registerCorsConfiguration("/**", configuration);
+
+        return urlBasedCorsConfigurationSource;
     }
 }

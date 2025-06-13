@@ -3,12 +3,6 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-<<<<<<< Updated upstream
-
-@NgModule({
-  declarations: [
-    AppComponent
-=======
 import { LoginComponent } from './components/auth/login/login.component';
 import { RegisterComponent } from './components/auth/register/register.component';
 import { HomeComponent } from './components/home/home.component';
@@ -23,10 +17,9 @@ import { ProductoListComponent } from './components/producto-list/producto-list.
 import { ProductoFormComponent } from './components/producto-form/producto-form.component';
 import { CategoriaListComponent } from './components/categoria-list/categoria-list.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import { provideHttpClient, withFetch } from '@angular/common/http';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
-import { ProductoDetailsComponent } from './components/producto-details/producto-details.component';
 
 @NgModule({
   declarations: [
@@ -43,16 +36,15 @@ import { ProductoDetailsComponent } from './components/producto-details/producto
     ProductoCardComponent,
     ProductoListComponent,
     ProductoFormComponent,
-    CategoriaListComponent,
-    ProductoDetailsComponent
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
+    CategoriaListComponent
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    NgbModule,
+    FormsModule,
+    BrowserAnimationsModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]

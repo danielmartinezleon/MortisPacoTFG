@@ -11,16 +11,20 @@ public record UserResponse(
         @JsonInclude(JsonInclude.Include.NON_NULL)
         String token,
         @JsonInclude(JsonInclude.Include.NON_NULL)
-        String refreshToken
+        String refreshToken,
+
+        String userRole
 
 ) {
 
     public static UserResponse of (Usuario user) {
-        return new UserResponse(user.getId(), user.getUsername(), null, null);
+        return new UserResponse(user.getId(), user.getUsername(), null, null,
+                user.getRoles().stream().findFirst().get().toString());
     }
 
     public static UserResponse of (Usuario user, String token, String refreshToken) {
-        return new UserResponse(user.getId(), user.getUsername(), token, refreshToken);
+        return new UserResponse(user.getId(), user.getUsername(), token, refreshToken,
+                user.getRoles().stream().findFirst().get().toString());
     }
 
 }
