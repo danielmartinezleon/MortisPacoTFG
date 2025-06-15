@@ -1,1 +1,137 @@
-<p>register works!</p>
+<div class="container mt-5">
+  <h3 class="text-center">Registro de usuario</h3>
+
+  <form (ngSubmit)="register()" #registroForm="ngForm" novalidate>
+
+    <!-- Username -->
+    <div class="mb-3">
+      <label for="username" class="form-label">Username:</label>
+      <input
+        type="text"
+        class="form-control"
+        id="username"
+        name="username"
+        required
+        [(ngModel)]="username"
+        #usernameRef="ngModel"
+      >
+      <div *ngIf="usernameRef.invalid && usernameRef.touched" class="text-danger">
+        Campo requerido
+      </div>
+    </div>
+
+    <!-- Nombre -->
+    <div class="mb-3">
+      <label for="nombre" class="form-label">Nombre:</label>
+      <input
+        type="text"
+        class="form-control"
+        id="nombre"
+        name="nombre"
+        required
+        [(ngModel)]="nombre"
+      >
+    </div>
+
+    <!-- Apellidos -->
+    <div class="mb-3">
+      <label for="apellidos" class="form-label">Apellidos:</label>
+      <input
+        type="text"
+        class="form-control"
+        id="apellidos"
+        name="apellidos"
+        required
+        [(ngModel)]="apellidos"
+      >
+    </div>
+
+    <!-- Dirección -->
+    <div class="mb-3">
+      <label for="direccion" class="form-label">Dirección:</label>
+      <input
+        type="text"
+        class="form-control"
+        id="direccion"
+        name="direccion"
+        required
+        [(ngModel)]="direccion"
+      >
+    </div>
+
+    <!-- Email -->
+    <div class="mb-3">
+      <label for="email" class="form-label">Email:</label>
+      <input
+        type="email"
+        class="form-control"
+        id="email"
+        name="email"
+        required
+        [(ngModel)]="email"
+        (blur)="verificarEmail()"
+      >
+      <div *ngIf="!emailValido && emailTocado" class="text-danger">
+        El correo electrónico no es válido.
+      </div>
+    </div>
+
+    <!-- Contraseña -->
+    <div class="mb-3">
+      <label for="password" class="form-label">Contraseña:</label>
+      <input
+        type="password"
+        class="form-control"
+        id="password"
+        name="password"
+        required
+        [(ngModel)]="password"
+      >
+    </div>
+
+    <!-- Confirmar contraseña -->
+    <div class="mb-3">
+      <label for="verifyPassword" class="form-label">Confirmar contraseña:</label>
+      <input
+        type="password"
+        class="form-control"
+        id="verifyPassword"
+        name="verifyPassword"
+        required
+        [(ngModel)]="verifyPassword"
+      >
+      <div class="text-danger" *ngIf="password !== verifyPassword && verifyPassword">
+        Las contraseñas no coinciden.
+      </div>
+    </div>
+    <!-- Términos y condiciones -->
+    <div class="form-check mb-3">
+      <input
+        class="form-check-input"
+        type="checkbox"
+        id="terminos"
+        name="terminos"
+        required
+      >
+      <label class="form-check-label" for="terminos">
+        Acepto los términos y condiciones
+      </label>
+    </div>
+
+    <!-- Botón de registro -->
+    <div class="d-grid gap-2">
+      <button
+        type="submit"
+        class="btn btn-primary"
+        [disabled]="
+          !registroForm.form.valid ||
+          password !== verifyPassword ||
+          !emailValido
+        "
+      >
+        Registrarse
+      </button>
+    </div>
+
+  </form>
+</div>

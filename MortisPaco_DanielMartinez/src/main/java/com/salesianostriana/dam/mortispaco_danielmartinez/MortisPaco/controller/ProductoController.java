@@ -5,6 +5,7 @@ import com.salesianostriana.dam.mortispaco_danielmartinez.MortisPaco.dto.product
 import com.salesianostriana.dam.mortispaco_danielmartinez.MortisPaco.dto.producto.GetProductoDto;
 import com.salesianostriana.dam.mortispaco_danielmartinez.MortisPaco.dto.ventas.GetVentaDto;
 import com.salesianostriana.dam.mortispaco_danielmartinez.MortisPaco.model.Producto;
+import com.salesianostriana.dam.mortispaco_danielmartinez.MortisPaco.model.Usuario;
 import com.salesianostriana.dam.mortispaco_danielmartinez.MortisPaco.query.ProductoSpecificationBuilder;
 import com.salesianostriana.dam.mortispaco_danielmartinez.MortisPaco.service.ProductoService;
 import com.salesianostriana.dam.mortispaco_danielmartinez.MortisPaco.util.SearchCriteria;
@@ -24,12 +25,14 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @RestController
@@ -230,18 +233,18 @@ public class ProductoController {
     })
     @PostMapping("/agregar/{productoId}")
     public ResponseEntity<GetVentaDto> agregarProductoAlCarrito(
-            @RequestParam UUID usuarioId,
+            @AuthenticationPrincipal Usuario usuario,
             @PathVariable UUID productoId,
             @RequestParam int cantidad) {
-
-        GetVentaDto ventaActualizada = productoService.agregarProductoAlCarrito(usuarioId, productoId, cantidad);
+        System.out.println("usuario: "+usuario);
+        GetVentaDto ventaActualizada = productoService.agregarProductoAlCarrito(usuario, productoId, cantidad);
         return ResponseEntity.ok(ventaActualizada);
     }
 
 
+
     public String getImageUrl(String filename) {
         return ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path("/download/")
                 .path(filename)
                 .toUriString();
     }

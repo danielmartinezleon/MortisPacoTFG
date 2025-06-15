@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ProductoListResponse, Producto } from '../../interfaces/producto/producto-list.interface';
 import { ProductoService } from '../../services/producto.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import Swal from 'sweetalert2';
+import { CarritoService } from '../../services/carrito.service';
 
 @Component({
   selector: 'app-producto-list',
@@ -14,10 +16,13 @@ export class ProductoListComponent implements OnInit {
   page: number = 0; // ¡Empieza en 0!
   loading: boolean = false;
   categoriaSeleccionada: string | null = null;
+  userRole = localStorage.getItem('userRole');
 
 
   constructor(private productoService: ProductoService,
-              private route: ActivatedRoute
+              private route: ActivatedRoute,
+              private router: Router,
+              private carritoService: CarritoService
   ) { }
 
   ngOnInit(): void {
@@ -83,5 +88,43 @@ filtrarPorCategoria(categoria: string): void {
   this.cargarProductos();
 }
 
+irACrearProducto(): void {
+  this.router.navigate(['/productos/crear']);
+}
 
+confirmarEliminacion(id: string): void {
+  Swal.fire({
+    title: '¿Estás seguro?',
+    text: 'Esta acción eliminará el producto permanentemente.',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Sí, eliminar',
+    cancelButtonText: 'Cancelar'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      this.productoService.eliminarProducto(id).subscribe({
+        next: () => {
+          Swal.fire('Eliminado', 'El producto ha sido eliminado.', 'success');
+          this.page = 0;
+          this.productos.content = [];
+          this.cargarProductos();
+        },
+        error: () => {
+          Swal.fire('Error', 'No se pudo eliminar el producto.', 'error');
+        }
+      });
+    }
+  });
+}
+
+agregarAlCarrito(productoId: string): void {
+  this.carritoService.agregarProducto(productoId, 1).subscribe({
+    next: () => {
+      Swal.fire('Añadido', 'El producto ha sido añadido al carrito.', 'success');
+    },
+    error: () => {
+      Swal.fire('Error', 'No se pudo añadir el producto al carrito.', 'error');
+    }
+  });
+}
 }

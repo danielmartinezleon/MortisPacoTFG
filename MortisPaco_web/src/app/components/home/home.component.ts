@@ -12,7 +12,5 @@ export class HomeComponent {
   productos: any[] = [];
   constructor(private carritoService: CarritoService) {}
 
-  handleAddToCart(productId: number) {
-    this.carritoService.agregarProducto(productId, 1);
-  }
+
 }

@@ -20,6 +20,20 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
+import { ProductoDetailComponent } from './components/producto-detail/producto-detail.component';
+import { ReactiveFormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
+import { ActivateComponent } from './components/auth/activate/activate.component';
+import { HistorialComponent } from './components/historial/historial.component';
+import { DetallesPedidoComponent } from './components/detalles-pedido/detalles-pedido.component';
+import { registerLocaleData } from '@angular/common';
+import localeEs from '@angular/common/locales/es';
+import { LOCALE_ID } from '@angular/core';
+
+
+registerLocaleData(localeEs, 'es-ES');
+
+
 
 @NgModule({
   declarations: [
@@ -36,7 +50,11 @@ import { FormsModule } from '@angular/forms';
     ProductoCardComponent,
     ProductoListComponent,
     ProductoFormComponent,
-    CategoriaListComponent
+    CategoriaListComponent,
+    ProductoDetailComponent,
+    ActivateComponent,
+    HistorialComponent,
+    DetallesPedidoComponent
   ],
   imports: [
     BrowserModule,
@@ -44,9 +62,13 @@ import { FormsModule } from '@angular/forms';
     NgbModule,
     FormsModule,
     BrowserAnimationsModule,
-    HttpClientModule
+    HttpClientModule,
+    ReactiveFormsModule,
+    RouterModule
   ],
-  providers: [],
+  providers: [
+    { provide: LOCALE_ID, useValue: 'es-ES' }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

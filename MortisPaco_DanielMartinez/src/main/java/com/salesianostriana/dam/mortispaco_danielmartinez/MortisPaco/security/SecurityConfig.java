@@ -66,7 +66,7 @@ public class SecurityConfig {
 
         http.authorizeHttpRequests(authz -> authz
                 .requestMatchers(HttpMethod.POST, "/usuario/auth/**", "/usuario/auth/refresh/token", "/error", "/usuario/activate/account/").permitAll()
-                .requestMatchers("/h2-console/**", "/swagger-ui/**", "/v3/api-docs/**", "/producto/lista", "producto/buscar/**").permitAll()
+                .requestMatchers("/h2-console/**", "/swagger-ui/**", "/v3/api-docs/**", "/producto/lista", "producto/buscar/**", "producto/**", "/download/**", "/imports/**").permitAll()
                 .requestMatchers("/usuario/editar/**", "/producto/buscar/**", "/usuario/historial/**", "/producto/**").authenticated()
 
                 .requestMatchers(HttpMethod.GET, "/carrito/**").hasRole("USER")
@@ -75,6 +75,7 @@ public class SecurityConfig {
                 .requestMatchers("/producto/agregar/**").hasRole("USER")
                 .requestMatchers("/categoria/crear", "/categoria/editar/**", "/categoria/eliminar/**",
                         "/producto/crear", "/producto/editar/**", "/categoria/eliminar/**").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.DELETE, "/producto/eliminar/**").hasRole("ADMIN")
                 .anyRequest().authenticated()
         );
 

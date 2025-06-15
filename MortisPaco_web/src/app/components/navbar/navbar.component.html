@@ -35,8 +35,10 @@
               Armas
             </button>
             <ul class="dropdown-menu">
-              <li><a class="dropdown-item" [routerLink]="['/productos/categoria', 'Melee']">Melee</a></li>
-              <li><a class="dropdown-item" [routerLink]="['/productos/categoria', 'Distancia']">Distancia</a></li>
+              <li><a class="dropdown-item" 
+                [routerLink]="['/productos/categoria', 'Melee']"
+                (click)="reloadAfterNavigation()">Melee</a></li>
+              <li><a class="dropdown-item" [routerLink]="['/productos/categoria', 'Distancia']" (click)="reloadAfterNavigation()">Distancia</a></li>
             </ul>
           </div>
         </li>
@@ -52,31 +54,35 @@
               Armaduras
             </button>
             <ul class="dropdown-menu">
-              <li><a class="dropdown-item" [routerLink]="['/productos/categoria', 'Metal']">Metal</a></li>
-              <li><a class="dropdown-item" [routerLink]="['/productos/categoria', 'Cuero']">Cuero</a></li>
+              <li><a class="dropdown-item" [routerLink]="['/productos/categoria', 'Metal']"
+                (click)="reloadAfterNavigation()">Metal</a></li>
+              <li><a class="dropdown-item" [routerLink]="['/productos/categoria', 'Cuero']"
+                (click)="reloadAfterNavigation()">Cuero</a></li>
             </ul>
           </div>
         </li>
         <div class="menu-item-right ms-auto d-flex flex-row">
           @if(userRole === null) {
-          <li class="nav-item">
-            <a class="nav-link" routerLink="/login">Login</a>
+          <li class="nav-item login-button">
+            <button class="btn btn-light text-dark" routerLink="/login">
+              <i class="bi bi-door-open"></i>
+              Login</button>
           </li>
           }@else if (userRole === 'USER') {
           <div class="dropdown">
             <a
-              class="btn btn-secondary dropdown-toggle"
+              class="btn btn-light dropdown-toggle"
               role="button"
               data-bs-toggle="dropdown"
               aria-expanded="false"
             >
-              Perfil
+              {{ username }}
             </a>
 
             <ul class="dropdown-menu">
               <li><a class="dropdown-item" href="#">Mi perfil</a></li>
               <li>
-                <a class="dropdown-item" href="#">Historial de pedidos</a>
+                <a class="dropdown-item" routerLink="/historial">Historial de pedidos</a>
               </li>
               <li>
                 <a class="dropdown-item" href="#" (click)="logout()"
@@ -91,18 +97,18 @@
           }@else if (userRole === 'ADMIN') {
           <div class="dropdown">
             <a
-              class="btn btn-secondary dropdown-toggle"
+              class="btn btn-light dropdown-toggle"
               role="button"
               data-bs-toggle="dropdown"
               aria-expanded="false"
             >
-              Admin
+              {{ username }}
             </a>
 
             <ul class="dropdown-menu">
               <li><a class="dropdown-item" href="#">Mi perfil</a></li>
               <li>
-                <a class="dropdown-item" href="#">Historial de pedidos</a>
+                <a class="dropdown-item" routerLink="/historial">Historial de pedidos</a>
               </li>
               <li><a class="dropdown-item" href="#">Descuentos</a></li>
               <li>

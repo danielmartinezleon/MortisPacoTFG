@@ -11,6 +11,8 @@ export class NavbarComponent {
   constructor(private usuarioService: UsuarioService) {}
     
   userRole = localStorage.getItem('userRole');
+  username = localStorage.getItem('username');
+  
 
   public logout(): void {
     this.usuarioService.logout();
@@ -19,4 +21,9 @@ export class NavbarComponent {
     localStorage.removeItem('userRole');
     window.location.reload();
   }
+
+  reloadAfterNavigation(): void {
+  setTimeout(() => location.reload(), 100);
+}
+
 }

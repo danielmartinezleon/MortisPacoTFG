@@ -115,12 +115,23 @@ public class UsuarioService {
     }
 
     @Transactional
-    public List<GetVentaDto> getVentasCerradas() {
-        List<Venta> ventasCerradas = ventaRepository.findByAbiertaFalse();
+    public List<GetVentaDto> getVentasCerradas(Usuario usuarioAuth) {
+        Usuario usuario = usuarioRepository.findById(usuarioAuth.getId())
+                .orElseThrow(() -> new EntityNotFoundException("Usuario no encontrado"));
+
+        List<Venta> ventasCerradas;
+
+        if (usuario.getRoles().contains(Role.ADMIN)) {
+            ventasCerradas = ventaRepository.findByAbiertaFalse();
+        } else {
+            ventasCerradas = ventaRepository.findByClienteAndAbiertaFalse(usuario);
+        }
+
         return ventasCerradas.stream()
                 .map(GetVentaDto::of)
                 .toList();
     }
+
 
     @Transactional
     public List<GetVentaDto> getVentasCerradasPorUsuario(UUID usuarioId) {

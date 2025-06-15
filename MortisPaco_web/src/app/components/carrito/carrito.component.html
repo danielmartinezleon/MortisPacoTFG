@@ -1,1 +1,51 @@
-<p>carrito works!</p>
+ <main class="flex-grow-1" style="margin-top: 56px;">
+    <div class="container">
+      <h3 class="mt-5">Carro</h3>
+      <div class="table-responsive">
+        <table class="table table-striped table-hover">
+          <thead>
+            <tr>
+              <th scope="col">Producto</th>
+              <th scope="col">Cantidad</th>
+              <th scope="col">Precio</th>
+              <th scope="col">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (item of carritoItems; track $index) {
+              <tr>
+                <td>{{ item.nombreProducto }}</td>
+                <td>
+                  <input [(ngModel)]="item.cantidad" min="1" max="10" type="number" class="form-control"/>
+                </td>
+                <td>{{ item.totalLinea | number:'1.2-2' }}€</td>
+                <td>
+                  <button class="btn btn-danger" (click)="eliminarDelCarrito(item.productoId)"><i class="bi bi-trash"></i> Eliminar</button>
+                </td>
+              </tr>
+            }
+            <!-- Repite tantas filas como productos haya -->
+          </tbody>
+        </table>
+      </div>
+      <div class="d-flex justify-content-between mt-4">
+        <div>
+          <form>
+            <div class="input-group">
+              <input type="text" name="codigo" class="form-control" placeholder="Código promocional">
+              <button class="btn btn-primary" type="submit">Canjear</button>
+            </div>
+          </form>
+        </div>
+        <div class="text-end">
+          <div class="fw-bold">Total:</div>
+          <div class="fw-bold">{{ calcularTotal() | number:'1.2-2' }}€</div>
+        </div>
+      </div>
+      <div class="text-end mt-3">
+        <form>
+          <button class="btn btn-success" (click)="cerrarCarrito()" type="button">Proceder con el pago</button>
+        </form>
+      </div>
+    </div>
+  </main>

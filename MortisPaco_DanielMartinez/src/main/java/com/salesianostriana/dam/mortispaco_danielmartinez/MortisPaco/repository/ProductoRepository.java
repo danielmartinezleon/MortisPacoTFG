@@ -19,4 +19,6 @@ public interface ProductoRepository extends JpaRepository<Producto, UUID>,
 
     Optional<Producto> findByNombre(String nombre);
 
+    Optional<Producto> findByNombreIgnoreCase(String nombre);
+
 }

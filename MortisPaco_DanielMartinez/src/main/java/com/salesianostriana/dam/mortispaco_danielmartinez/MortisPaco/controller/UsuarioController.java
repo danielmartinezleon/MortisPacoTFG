@@ -186,26 +186,19 @@ public class UsuarioController {
                                     """))),
             @ApiResponse(responseCode = "404", description = "Usuario no encontrado", content = @Content)
     })
-    @GetMapping("/historial/{usuarioId}")
-    public ResponseEntity<List<GetVentaDto>> getVentasCerradasPorUsuario(@PathVariable UUID usuarioId) {
-        Usuario usuario = usuarioService.findById(usuarioId);
 
-        if (usuario.getRoles().contains(Role.ADMIN)) {
-            List<GetVentaDto> ventas = usuarioService.getVentasCerradas();
-            return ResponseEntity.status(HttpStatus.OK).body(ventas);
-
-        } else if (usuario.getRoles().contains(Role.USER)) {
-            try {
-                List<GetVentaDto> ventas = usuarioService.getVentasCerradasPorUsuario(usuarioId);
-                return ResponseEntity.status(HttpStatus.OK).body(ventas);
-            } catch (EntityNotFoundException e) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-            }
-        }
-        else {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
+    @GetMapping("/historial")
+    public ResponseEntity<List<GetVentaDto>> getVentasCerradas(@AuthenticationPrincipal Usuario usuarioAuth) {
+        try {
+            List<GetVentaDto> ventas = usuarioService.getVentasCerradas(usuarioAuth);
+            return ResponseEntity.ok(ventas);
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
+
 
 
 }

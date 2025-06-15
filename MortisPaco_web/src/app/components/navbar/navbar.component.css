@@ -7,7 +7,7 @@
     left: 140px;
     top: 50%;
     transform: translateY(-50%);
-    width: 100%;
+    width: 90%;
 }
 
 .menu{
@@ -21,4 +21,8 @@
 
 .dropdown-menu {
   z-index: 1050 !important;
+}
+
+.login-button {
+    justify-content: end;
 }

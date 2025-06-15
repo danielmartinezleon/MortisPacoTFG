@@ -20,6 +20,7 @@ export class LoginComponent {
           localStorage.setItem('token', response.token);
           localStorage.setItem('refreshToken', response.refreshToken);
           localStorage.setItem('userRole', response.userRole);
+          localStorage.setItem('username', this.username);
           console.log('Login successful:', response.userRole);
           
           if (response.userRole) {

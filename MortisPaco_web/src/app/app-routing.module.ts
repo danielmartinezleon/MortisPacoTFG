@@ -7,16 +7,27 @@ import { ProductoFormComponent } from './components/producto-form/producto-form.
 import { CategoriaListComponent } from './components/categoria-list/categoria-list.component';
 import { CarritoComponent } from './components/carrito/carrito.component';
 import { RouterModule, Routes } from '@angular/router';
+import { ProductoDetailComponent } from './components/producto-detail/producto-detail.component';
+import { ActivateComponent } from './components/auth/activate/activate.component';
+import { HistorialComponent } from './components/historial/historial.component';
+import { DetallesPedidoComponent } from './components/detalles-pedido/detalles-pedido.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'login', component: LoginComponent },
   { path: 'registro', component: RegisterComponent },
+  { path: 'activate', component: ActivateComponent },
   { path: 'productos', component: ProductoListComponent },
   { path: 'productos/categoria/:categoria', component: ProductoListComponent },
+  { path: 'producto/:id', component: ProductoDetailComponent },
   { path: 'productos/nuevo', component: ProductoFormComponent },
   { path: 'categorias', component: CategoriaListComponent },
-  { path: 'carrito', component: CarritoComponent }
+  { path: 'carrito', component: CarritoComponent },
+  { path: 'productos/crear', component: ProductoFormComponent },
+  { path: 'productos/editar/:id', component: ProductoFormComponent },
+  { path: 'productos/eliminar/:id', component: ProductoDetailComponent },
+  { path: 'historial', component: HistorialComponent },
+  { path: 'detalle/:id', component: DetallesPedidoComponent }
 ];
 
 @NgModule({

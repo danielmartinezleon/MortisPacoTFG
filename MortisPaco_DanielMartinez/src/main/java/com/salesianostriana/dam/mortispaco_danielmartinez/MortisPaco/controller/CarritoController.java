@@ -1,6 +1,7 @@
 package com.salesianostriana.dam.mortispaco_danielmartinez.MortisPaco.controller;
 
 import com.salesianostriana.dam.mortispaco_danielmartinez.MortisPaco.dto.ventas.GetVentaDto;
+import com.salesianostriana.dam.mortispaco_danielmartinez.MortisPaco.model.Usuario;
 import com.salesianostriana.dam.mortispaco_danielmartinez.MortisPaco.service.ProductoService;
 import com.salesianostriana.dam.mortispaco_danielmartinez.MortisPaco.service.UsuarioService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -14,6 +15,8 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -40,10 +43,10 @@ public class CarritoController {
             @ApiResponse(responseCode = "404", description = "Usuario o venta no encontrados", content = @Content),
             @ApiResponse(responseCode = "400", description = "Error al cerrar la venta", content = @Content)
     })
-    @PutMapping("/cerrarventa/{usuarioId}/{ventaId}")
-    public ResponseEntity<GetVentaDto> cerrarVenta(@PathVariable UUID usuarioId, @PathVariable UUID ventaId) {
+    @PutMapping("/cerrarventa/{ventaId}")
+    public ResponseEntity<GetVentaDto> cerrarVenta(@AuthenticationPrincipal Usuario usuario, @PathVariable UUID ventaId) {
         try {
-            GetVentaDto ventaCerrada = productoService.cerrarVentaParaUsuario(usuarioId, ventaId);
+            GetVentaDto ventaCerrada = productoService.cerrarVentaParaUsuario(usuario, ventaId);
             return ResponseEntity.status(HttpStatus.OK)
                     .body(ventaCerrada);
         } catch (EntityNotFoundException e) {
@@ -67,19 +70,20 @@ public class CarritoController {
                                     """))),
             @ApiResponse(responseCode = "404", description = "Producto no encontrado en el carrito", content = @Content)
     })
-    @DeleteMapping("/eliminar/{ventaId}/{lineaVentaId}")
+    @DeleteMapping("/eliminar/{lineaVentaId}")
     public ResponseEntity<GetVentaDto> eliminarProductoDelCarrito(
-            @PathVariable UUID ventaId,
+            @AuthenticationPrincipal Usuario usuario,
             @PathVariable UUID lineaVentaId) {
         try {
-            GetVentaDto ventaActualizada = productoService.eliminarProductoDelCarrito(ventaId, lineaVentaId);
-            return ResponseEntity.status(HttpStatus.OK)
-                    .body(ventaActualizada);
+            GetVentaDto ventaActualizada = productoService.eliminarProductoDelCarrito(usuario, lineaVentaId);
+            return ResponseEntity.ok(ventaActualizada);
         } catch (EntityNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(null);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        } catch (AccessDeniedException e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
         }
     }
+
 
     @Operation(summary = "Obtener el carrito (venta abierta) de un usuario")
     @ApiResponses(value = {
@@ -88,10 +92,10 @@ public class CarritoController {
                             schema = @Schema(implementation = GetVentaDto.class))),
             @ApiResponse(responseCode = "404", description = "Usuario o carrito no encontrado", content = @Content)
     })
-    @GetMapping("/{usuarioId}")
-    public ResponseEntity<GetVentaDto> obtenerCarrito(@PathVariable UUID usuarioId) {
+    @GetMapping("/")
+    public ResponseEntity<GetVentaDto> obtenerCarrito(@AuthenticationPrincipal Usuario usuario) {
         try {
-            GetVentaDto carrito = productoService.obtenerCarrito(usuarioId);
+            GetVentaDto carrito = productoService.obtenerCarrito(usuario);
             return ResponseEntity.ok(carrito);
         } catch (EntityNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);

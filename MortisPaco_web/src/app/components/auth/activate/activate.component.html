@@ -1,0 +1,38 @@
+<div class="container mt-5">
+  <h3 class="text-center mb-4">Activación de cuenta</h3>
+
+  <form (ngSubmit)="onSubmit()" #activateForm="ngForm" novalidate>
+    <div class="mb-3">
+      <label for="token" class="form-label">Token de activación:</label>
+      <input
+        type="text"
+        class="form-control"
+        id="token"
+        name="token"
+        required
+        [(ngModel)]="token"
+        #tokenRef="ngModel"
+      >
+      <div *ngIf="tokenRef.invalid && tokenRef.touched" class="text-danger">
+        El token es obligatorio.
+      </div>
+    </div>
+
+    <div class="d-grid gap-2">
+      <button
+        type="submit"
+        class="btn btn-success"
+        [disabled]="!activateForm.form.valid"
+      >
+        Activar cuenta
+      </button>
+    </div>
+  </form>
+
+  <div class="mt-3 text-success" *ngIf="mensajeExito">
+    {{ mensajeExito }}
+  </div>
+  <div class="mt-3 text-danger" *ngIf="mensajeError">
+    {{ mensajeError }}
+  </div>
+</div>

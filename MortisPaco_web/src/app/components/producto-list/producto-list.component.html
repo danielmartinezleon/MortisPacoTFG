@@ -1,23 +1,60 @@
-
 <div class="row">
-  @for (p of productos.content; track $index) {
-    <div class="col-md-3">
-  <div class="card my-3 bg-light">
-    <a [routerLink]="['/user/productos']">
-      <img [src]="p.imageUrl" class="card-img-top img-fluid" [alt]="p.nombre">
-    </a>
-    <div class="card-body">
-      <h5 class="card-title">{{ p.nombre }}</h5>
-      <p class="precio">{{ p.precio | currency: 'EUR':'symbol':'1.2-2' }}</p>
-      <button class="btn btn-success">Añadir a mi cesta</button>
+  @if (userRole === 'ADMIN') {
+  <div class="text-center mb-3">
+    <button type="button" class="btn btn-primary" (click)="irACrearProducto()">
+      <i class="bi bi-bag-plus-fill"></i> Agregar Producto
+    </button>
+  </div>
+
+  } @for (p of productos.content; track $index) {
+  <div class="col-md-3">
+    <div class="card my-3 bg-light">
+      <a [routerLink]="['/producto', p.id]">
+        <img
+          [src]="p.imageUrl"
+          class="card-img-top img-fluid"
+          [alt]="p.nombre"
+        />
+      </a>
+      <div class="card-body">
+        <h5 class="card-title">{{ p.nombre }}</h5>
+        <p class="precio">
+          {{ p.precio | currency : "EUR" : "symbol" : "1.2-2" }}
+        </p>
+
+        @if (userRole === 'USER') {
+        <button class="btn btn-success" (click)="agregarAlCarrito(p.id)">Añadir a mi cesta</button>
+        } @if (userRole === 'ADMIN') {
+        <div class="btn-group mt-2" role="group">
+          <button class="btn btn-danger" (click)="confirmarEliminacion(p.id)">
+            <i class="bi bi-trash3-fill"></i>
+          </button>
+
+          <a [routerLink]="['/productos/editar', p.id]">
+            <button class="btn btn-primary">
+              <i class="bi bi-pencil-fill"></i>
+            </button>
+          </a>
+        </div>
+        }
+      </div>
     </div>
   </div>
-</div>
-}
-<button 
-  (click)="cargarProductos()" 
-  [disabled]="loading || productos.last">
-  {{ loading ? 'Cargando...' : productos.last ? 'No hay más productos' : 'Cargar más' }}
-</button>
-</div>
+  }
 
+  <div class="text-center mt-4">
+    <button
+      class="btn btn-outline-primary"
+      (click)="cargarProductos()"
+      [disabled]="loading || productos.last"
+    >
+      {{
+        loading
+          ? "Cargando..."
+          : productos.last
+          ? "No hay más productos"
+          : "Cargar más"
+      }}
+    </button>
+  </div>
+</div>
