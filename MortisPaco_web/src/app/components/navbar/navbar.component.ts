@@ -8,22 +8,27 @@ import { UsuarioService } from '../../services/usuario.service';
 })
 export class NavbarComponent {
 
+  get userRole(): string | null {
+    return localStorage.getItem('userRole');
+  }
+
+  get username(): string | null {
+    return localStorage.getItem('username');
+  }
+
   constructor(private usuarioService: UsuarioService) {}
-    
-  userRole = localStorage.getItem('userRole');
-  username = localStorage.getItem('username');
-  
 
   public logout(): void {
     this.usuarioService.logout();
     localStorage.removeItem('token');
     localStorage.removeItem('refreshToken');
     localStorage.removeItem('userRole');
-    window.location.reload();
+    localStorage.removeItem('username');
+    window.location.reload(); // Esto recarga y actualiza el navbar
   }
 
   reloadAfterNavigation(): void {
-  setTimeout(() => location.reload(), 100);
+    setTimeout(() => location.reload(), 100);
+  }
 }
 
-}

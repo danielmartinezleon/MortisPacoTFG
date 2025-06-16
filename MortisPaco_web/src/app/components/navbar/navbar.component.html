@@ -35,10 +35,22 @@
               Armas
             </button>
             <ul class="dropdown-menu">
-              <li><a class="dropdown-item" 
-                [routerLink]="['/productos/categoria', 'Melee']"
-                (click)="reloadAfterNavigation()">Melee</a></li>
-              <li><a class="dropdown-item" [routerLink]="['/productos/categoria', 'Distancia']" (click)="reloadAfterNavigation()">Distancia</a></li>
+              <li>
+                <a
+                  class="dropdown-item"
+                  [routerLink]="['/productos/categoria', 'Melee']"
+                  (click)="reloadAfterNavigation()"
+                  >Melee</a
+                >
+              </li>
+              <li>
+                <a
+                  class="dropdown-item"
+                  [routerLink]="['/productos/categoria', 'Distancia']"
+                  (click)="reloadAfterNavigation()"
+                  >Distancia</a
+                >
+              </li>
             </ul>
           </div>
         </li>
@@ -54,71 +66,126 @@
               Armaduras
             </button>
             <ul class="dropdown-menu">
-              <li><a class="dropdown-item" [routerLink]="['/productos/categoria', 'Metal']"
-                (click)="reloadAfterNavigation()">Metal</a></li>
-              <li><a class="dropdown-item" [routerLink]="['/productos/categoria', 'Cuero']"
-                (click)="reloadAfterNavigation()">Cuero</a></li>
+              <li>
+                <a
+                  class="dropdown-item"
+                  [routerLink]="['/productos/categoria', 'Metal']"
+                  (click)="reloadAfterNavigation()"
+                  >Metal</a
+                >
+              </li>
+              <li>
+                <a
+                  class="dropdown-item"
+                  [routerLink]="['/productos/categoria', 'Cuero']"
+                  (click)="reloadAfterNavigation()"
+                  >Cuero</a
+                >
+              </li>
             </ul>
           </div>
         </li>
+        <li class="nav-item">
+          <button
+            class="btn btn-danger nav-link text-white d-flex align-items-center"
+            routerLink="/quienessomos"
+          >
+            <img
+              src="/img/quienes-somos.png"
+              alt="Quienes Somos"
+              class="me-1"
+            />
+            Quienes Somos
+          </button>
+        </li>
+        <li class="nav-item">
+          <button
+            class="btn btn-danger nav-link text-white d-flex align-items-center"
+            routerLink="/avisoslegales"
+          >
+            <img
+              src="/img/avisos-legales.png"
+              alt="Avisos Legales"
+              class="me-1"
+            />
+            Avisos Legales
+          </button>
+        </li>
+        <li class="nav-item d-flex align-items-center ms-3">
+          <form class="d-flex">
+            <input
+              class="form-control me-2"
+              type="search"
+              placeholder="Buscar productos..."
+              aria-label="Buscar"
+            />
+            <button class="btn btn-light" type="submit">
+              <i class="bi bi-search"></i>
+            </button>
+          </form>
+        </li>
         <div class="menu-item-right ms-auto d-flex flex-row">
-          @if(userRole === null) {
-          <li class="nav-item login-button">
+          <li class="nav-item login-button" *ngIf="userRole === null">
             <button class="btn btn-light text-dark" routerLink="/login">
-              <i class="bi bi-door-open"></i>
-              Login</button>
+              <i class="bi bi-door-open"></i> Login
+            </button>
           </li>
-          }@else if (userRole === 'USER') {
-          <div class="dropdown">
-            <a
-              class="btn btn-light dropdown-toggle"
-              role="button"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
-            >
-              {{ username }}
-            </a>
 
-            <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="#">Mi perfil</a></li>
-              <li>
-                <a class="dropdown-item" routerLink="/historial">Historial de pedidos</a>
-              </li>
-              <li>
-                <a class="dropdown-item" href="#" (click)="logout()"
-                  >Cerrar sesión</a
-                >
-              </li>
-            </ul>
-          </div>
-          <li class="nav-item">
-            <a class="nav-link" routerLink="/carrito">Carrito</a>
-          </li>
-          }@else if (userRole === 'ADMIN') {
-          <div class="dropdown">
-            <a
-              class="btn btn-light dropdown-toggle"
-              role="button"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
-            >
-              {{ username }}
-            </a>
+          <ng-container *ngIf="userRole === 'USER'">
+            <div class="dropdown">
+              <a
+                class="btn btn-light dropdown-toggle"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                {{ username }}
+              </a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="#">Mi perfil</a></li>
+                <li>
+                  <a class="dropdown-item" routerLink="/historial"
+                    >Historial de pedidos</a
+                  >
+                </li>
+                <li>
+                  <a class="dropdown-item" href="#" (click)="logout()"
+                    >Cerrar sesión</a
+                  >
+                </li>
+              </ul>
+            </div>
+            <li class="nav-item">
+              <a class="nav-link" routerLink="/carrito">Carrito</a>
+            </li>
+          </ng-container>
 
-            <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="#">Mi perfil</a></li>
-              <li>
-                <a class="dropdown-item" routerLink="/historial">Historial de pedidos</a>
-              </li>
-              <li><a class="dropdown-item" href="#">Descuentos</a></li>
-              <li>
-                <a class="dropdown-item" href="#" (click)="logout()"
-                  >Cerrar sesión</a
-                >
-              </li>
-            </ul>
-          </div>
-          }
+          <ng-container *ngIf="userRole === 'ADMIN'">
+            <div class="dropdown">
+              <a
+                class="btn btn-light dropdown-toggle"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                {{ username }}
+              </a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="#">Mi perfil</a></li>
+                <li>
+                  <a class="dropdown-item" routerLink="/historial"
+                    >Historial de pedidos</a
+                  >
+                </li>
+                <li><a class="dropdown-item" href="#">Descuentos</a></li>
+                <li>
+                  <a class="dropdown-item" href="#" (click)="logout()"
+                    >Cerrar sesión</a
+                  >
+                </li>
+              </ul>
+            </div>
+          </ng-container>
         </div>
       </ul>
     </div>

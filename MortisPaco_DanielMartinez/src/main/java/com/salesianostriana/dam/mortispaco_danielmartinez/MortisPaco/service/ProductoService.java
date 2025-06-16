@@ -162,8 +162,13 @@ public class ProductoService {
 
         Venta venta = ventaRepository.findByClienteAndAbiertaTrue(usuario);
 
+        if (venta == null) {
+            return GetVentaDto.of(new Venta());
+        }
+
         return GetVentaDto.of(venta);
     }
+
 
 
     @Transactional

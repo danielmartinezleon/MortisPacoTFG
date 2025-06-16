@@ -11,6 +11,8 @@ import { ProductoDetailComponent } from './components/producto-detail/producto-d
 import { ActivateComponent } from './components/auth/activate/activate.component';
 import { HistorialComponent } from './components/historial/historial.component';
 import { DetallesPedidoComponent } from './components/detalles-pedido/detalles-pedido.component';
+import { QuienesSomosComponent } from './components/quienes-somos/quienes-somos.component';
+import { AvisosLegalesComponent } from './components/avisos-legales/avisos-legales.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -27,7 +29,9 @@ const routes: Routes = [
   { path: 'productos/editar/:id', component: ProductoFormComponent },
   { path: 'productos/eliminar/:id', component: ProductoDetailComponent },
   { path: 'historial', component: HistorialComponent },
-  { path: 'detalle/:id', component: DetallesPedidoComponent }
+  { path: 'detalle/:id', component: DetallesPedidoComponent },
+  { path: 'quienessomos', component: QuienesSomosComponent },
+  { path: 'avisoslegales', component: AvisosLegalesComponent }
 ];
 
 @NgModule({

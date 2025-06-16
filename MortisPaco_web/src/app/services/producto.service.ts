@@ -59,15 +59,7 @@ export class ProductoService {
   }
 
   eliminarProducto(id: string) {
-
-    const token = localStorage.getItem('token');
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${token}`,
-    });
-
     return this.http.delete(
-      `${environment.apiBaseUrl}/producto/eliminar/${id}`,
-      { headers }
-    );
+      `${environment.apiBaseUrl}/producto/eliminar/${id}`);
   }
 }

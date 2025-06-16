@@ -2,6 +2,7 @@ package com.salesianostriana.dam.mortispaco_danielmartinez.MortisPaco.security.j
 
 import com.salesianostriana.dam.mortispaco_danielmartinez.MortisPaco.model.Usuario;
 import com.salesianostriana.dam.mortispaco_danielmartinez.MortisPaco.repository.UsuarioRepository;
+import com.salesianostriana.dam.mortispaco_danielmartinez.MortisPaco.security.exceptionhandling.JwtAuthenticationEntryPoint;
 import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -11,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.stereotype.Component;
@@ -32,35 +34,44 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Autowired
     @Qualifier("handlerExceptionResolver")
     private HandlerExceptionResolver resolver;
+    private final JwtAuthenticationEntryPoint authenticationEntryPoint;
+
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+            throws ServletException, IOException {
+
+        String path = request.getRequestURI();
+        if (path.equals("/usuario/auth/refresh/token")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
 
         String token = getJwtAccessTokenFromRequest(request);
 
-        try {
-            if (StringUtils.hasText(token) && jwtService.validateAccessToken(token)) {
-                UUID id = jwtService.getUserIdFromAccessToken(token);
+        if (StringUtils.hasText(token)) {
+            try {
+                if (jwtService.validateAccessToken(token)) {
+                    UUID id = jwtService.getUserIdFromAccessToken(token);
 
-                Optional<Usuario> result = usuarioRepository.findById(id);
+                    Optional<Usuario> result = usuarioRepository.findById(id);
 
-                if (result.isPresent()) {
-                    Usuario usuario = result.get();
-                    UsernamePasswordAuthenticationToken
-                            authenticationToken = new UsernamePasswordAuthenticationToken(
-                                    usuario,
-                                    null,
-                                    usuario.getAuthorities()
-                    );
-
-                    authenticationToken.setDetails(new WebAuthenticationDetails(request));
-
-                    SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+                    if (result.isPresent()) {
+                        Usuario usuario = result.get();
+                        UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(
+                                usuario, null, usuario.getAuthorities()
+                        );
+                        auth.setDetails(new WebAuthenticationDetails(request));
+                        SecurityContextHolder.getContext().setAuthentication(auth);
+                    }
                 }
+            } catch (JwtException ex) {
+                AuthenticationException authException = new AuthenticationException(ex.getMessage()) {};
+                authenticationEntryPoint.commence(request, response, authException);
+
+                return;
             }
 
-        } catch (JwtException ex) {
-            resolver.resolveException(request, response, null, ex);
         }
 
         filterChain.doFilter(request, response);

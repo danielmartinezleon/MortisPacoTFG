@@ -18,7 +18,7 @@ import { ProductoFormComponent } from './components/producto-form/producto-form.
 import { CategoriaListComponent } from './components/categoria-list/categoria-list.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { ProductoDetailComponent } from './components/producto-detail/producto-detail.component';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -29,6 +29,10 @@ import { DetallesPedidoComponent } from './components/detalles-pedido/detalles-p
 import { registerLocaleData } from '@angular/common';
 import localeEs from '@angular/common/locales/es';
 import { LOCALE_ID } from '@angular/core';
+import { AuthInterceptor } from './interceptors/auth.interceptor';
+import { QuienesSomosComponent } from './components/quienes-somos/quienes-somos.component';
+import { AvisosLegalesComponent } from './components/avisos-legales/avisos-legales.component';
+
 
 
 registerLocaleData(localeEs, 'es-ES');
@@ -54,7 +58,9 @@ registerLocaleData(localeEs, 'es-ES');
     ProductoDetailComponent,
     ActivateComponent,
     HistorialComponent,
-    DetallesPedidoComponent
+    DetallesPedidoComponent,
+    QuienesSomosComponent,
+    AvisosLegalesComponent
   ],
   imports: [
     BrowserModule,
@@ -67,7 +73,12 @@ registerLocaleData(localeEs, 'es-ES');
     RouterModule
   ],
   providers: [
-    { provide: LOCALE_ID, useValue: 'es-ES' }
+    { provide: LOCALE_ID, useValue: 'es-ES' },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true
+    }
   ],
   bootstrap: [AppComponent]
 })

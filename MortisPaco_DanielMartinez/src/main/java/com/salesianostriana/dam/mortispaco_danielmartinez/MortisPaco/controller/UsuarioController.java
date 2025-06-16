@@ -6,6 +6,7 @@ import com.salesianostriana.dam.mortispaco_danielmartinez.MortisPaco.model.Role;
 import com.salesianostriana.dam.mortispaco_danielmartinez.MortisPaco.model.Usuario;
 import com.salesianostriana.dam.mortispaco_danielmartinez.MortisPaco.security.jwt.access.JwtService;
 import com.salesianostriana.dam.mortispaco_danielmartinez.MortisPaco.security.jwt.refresh.RefreshToken;
+import com.salesianostriana.dam.mortispaco_danielmartinez.MortisPaco.security.jwt.refresh.RefreshTokenRequest;
 import com.salesianostriana.dam.mortispaco_danielmartinez.MortisPaco.security.jwt.refresh.RefreshTokenService;
 import com.salesianostriana.dam.mortispaco_danielmartinez.MortisPaco.service.UsuarioService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -115,6 +116,14 @@ public class UsuarioController {
 
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(UserResponse.of(user, accessToken, refreshToken.getToken()));
+    }
+
+    @PostMapping("/auth/refresh/token")
+    public ResponseEntity<?> refreshToken(@RequestBody RefreshTokenRequest req) {
+        System.out.println("Received refresh token: " + req.refreshToken());
+        String token = req.refreshToken();
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(refreshTokenService.refreshToken(token));
     }
 
     @PostMapping("/auth/logout")

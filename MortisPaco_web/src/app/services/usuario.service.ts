@@ -25,9 +25,22 @@ export class UsuarioService {
   }
 
   getHistorial(): Observable<VentaResponse> {
-    const headers = { Authorization: `Bearer ${localStorage.getItem('token')}` };
-    return this.http.get<VentaResponse>(`${environment.apiBaseUrl}/usuario/historial`, { headers });
-  }
+  return this.http.get<VentaResponse>(`${environment.apiBaseUrl}/usuario/historial`);
+}
+
+
+  refreshToken(): Observable<UsuarioResponse> {
+  const refreshToken = localStorage.getItem('refreshToken');
+  return this.http.post<UsuarioResponse>(
+    `${environment.apiBaseUrl}/usuario/auth/refresh/token`,
+    { refreshToken },
+    {
+      headers: { 'Content-Type': 'application/json' }
+    }
+  );
+}
+
+
 
   logout(): void {
     localStorage.removeItem('token');

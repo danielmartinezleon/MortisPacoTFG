@@ -12,31 +12,21 @@ export class CarritoService {
   constructor(private http: HttpClient) { }
 
   agregarProducto(productoId: string, cantidad: number): Observable<VentaResponse> {
-    const headers = {
-      'Authorization': `Bearer ${localStorage.getItem('token')}`,
-    }
     const params = new HttpParams().set('cantidad', cantidad.toString());
-    return this.http.post<VentaResponse>(`${environment.apiBaseUrl}/producto/agregar/${productoId}`, null, { params, headers });
+    return this.http.post<VentaResponse>(`${environment.apiBaseUrl}/producto/agregar/${productoId}`, null, { params });
   }
 
   getCarrito(): Observable<VentaResponse> {
-    const headers = {
-      'Authorization': `Bearer ${localStorage.getItem('token')}`,
-    }
-    return this.http.get<VentaResponse>(`${environment.apiBaseUrl}/carrito/`, { headers });
+    return this.http.get<VentaResponse>(`${environment.apiBaseUrl}/carrito/`);
   }
+
   eliminarProducto(lineaVentaId: string): Observable<VentaResponse> {
-    const headers = {
-      'Authorization': `Bearer ${localStorage.getItem('token')}`,
-    }
-    return this.http.delete<VentaResponse>(`${environment.apiBaseUrl}/carrito/eliminar/${lineaVentaId}`, { headers });
+    return this.http.delete<VentaResponse>(`${environment.apiBaseUrl}/carrito/eliminar/${lineaVentaId}`);
   }
 
   cerrarCarrito(idVenta: string): Observable<VentaResponse> {
-    const headers = {
-      'Authorization': `Bearer ${localStorage.getItem('token')}`,
-    }
-    return this.http.put<VentaResponse>(`${environment.apiBaseUrl}/carrito/cerrarventa/${idVenta}`, null, { headers });
+    
+    return this.http.put<VentaResponse>(`${environment.apiBaseUrl}/carrito/cerrarventa/${idVenta}`, null);
   }
   }
 
