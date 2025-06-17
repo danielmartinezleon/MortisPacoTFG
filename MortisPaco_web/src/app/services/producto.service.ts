@@ -33,6 +33,14 @@ export class ProductoService {
     );
   }
 
+  getProductosByNombre(nombre: string, page: number): Observable<ProductoListResponse> {
+  return this.http.get<ProductoListResponse>(
+    `${environment.apiBaseUrl}/producto/buscar/?nombre=${nombre}&page=${page}`
+  );
+}
+
+
+
   crearProducto(producto: any, file: File) {
     const formData = new FormData();
     formData.append(

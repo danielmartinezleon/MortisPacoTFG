@@ -74,7 +74,7 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.DELETE, "/producto/eliminar/**").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.POST, "/usuario/auth/**", "/usuario/auth/refresh/token", "/error", "/usuario/activate/account/").permitAll()
                 .requestMatchers("/h2-console/**", "/swagger-ui/**", "/v3/api-docs/**", "/producto/lista", "producto/buscar/**", "producto/**", "/download/**", "/imports/**").permitAll()
-                .requestMatchers("/usuario/editar/**", "/producto/buscar/**", "/usuario/historial/**", "/producto/**").authenticated()
+                .requestMatchers("/usuario/editar/**", "/producto/buscar/**", "/usuario/historial/**", "/producto/**", "/usuario/perfil").authenticated()
 
 
                 .anyRequest().authenticated()

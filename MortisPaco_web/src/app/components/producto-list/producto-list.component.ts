@@ -17,6 +17,8 @@ export class ProductoListComponent implements OnInit {
   loading: boolean = false;
   categoriaSeleccionada: string | null = null;
   userRole = localStorage.getItem('userRole');
+  nombreBuscado: string | null = null;
+
 
 
   constructor(private productoService: ProductoService,
@@ -26,17 +28,9 @@ export class ProductoListComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-  // Inicializamos con estructura vacía compatible con la interfaz
   this.productos = {
     content: [],
-    pageable: {
-      pageNumber: 0,
-      pageSize: 0,
-      sort: { sorted: false, empty: true, unsorted: true },
-      offset: 0,
-      paged: true,
-      unpaged: false
-    },
+    pageable: { pageNumber: 0, pageSize: 0, sort: { sorted: false, empty: true, unsorted: true }, offset: 0, paged: true, unpaged: false },
     last: false,
     totalElements: 0,
     totalPages: 0,
@@ -48,24 +42,37 @@ export class ProductoListComponent implements OnInit {
     empty: true
   };
 
-  // Suscribirse a los cambios en los parámetros de ruta
-  this.route.paramMap.subscribe(params => {
-    const categoria = params.get('categoria');
-    this.categoriaSeleccionada = categoria;
-    this.page = 0;
-    this.productos.content = [];
-    this.cargarProductos();
+  // Escucha tanto cambios en la ruta como en los queryParams
+  this.route.paramMap.subscribe(() => {
+    this.route.queryParams.subscribe(params => {
+      const nombre = params['nombre'];
+      this.nombreBuscado = nombre || null;
+
+      const rutaCategoria = this.route.snapshot.paramMap.get('categoria');
+      this.categoriaSeleccionada = rutaCategoria || null;
+
+      this.page = 0;
+      this.productos.content = [];
+
+      this.cargarProductos();
+    });
   });
 }
 
 
- cargarProductos(): void {
+cargarProductos(): void {
   if (this.loading || this.productos.last) return;
   this.loading = true;
 
-  const observable = this.categoriaSeleccionada
-    ? this.productoService.getProductosByCategoria(this.categoriaSeleccionada, this.page)
-    : this.productoService.getProductos(this.page);
+  let observable;
+
+  if (this.nombreBuscado) {
+    observable = this.productoService.getProductosByNombre(this.nombreBuscado, this.page);
+  } else if (this.categoriaSeleccionada) {
+    observable = this.productoService.getProductosByCategoria(this.categoriaSeleccionada, this.page);
+  } else {
+    observable = this.productoService.getProductos(this.page);
+  }
 
   observable.subscribe({
     next: (response) => {
@@ -80,6 +87,7 @@ export class ProductoListComponent implements OnInit {
     }
   });
 }
+
 
 filtrarPorCategoria(categoria: string): void {
   this.categoriaSeleccionada = categoria;

@@ -189,6 +189,7 @@ public class ProductoController {
     @GetMapping("/buscar/")
     public ResponseEntity<Page<GetProductoDto>> buscar(
             @RequestParam(value = "categoria", required = false) String categoria,
+            @RequestParam(value = "nombre", required = false) String nombre,
             @RequestParam(value = "precioMin", required = false) Double precioMin,
             @RequestParam(value = "precioMax", required = false) Double precioMax,
             @RequestParam(value = "page", defaultValue = "0") int page,
@@ -199,11 +200,17 @@ public class ProductoController {
         if (categoria != null) {
             params.add(new SearchCriteria("categoria", ":", categoria));
         }
+        if (nombre != null) {
+            params.add(new SearchCriteria("nombre", ":", nombre));
+        }
+        if (nombre != null && !nombre.trim().isEmpty()) {
+            params.add(new SearchCriteria("nombre", "like", nombre.trim()));
+        }
         if (precioMin != null) {
-            params.add(new SearchCriteria("precioMin", ">", precioMin.toString()));
+            params.add(new SearchCriteria("precio", ">", precioMin.toString()));
         }
         if (precioMax != null) {
-            params.add(new SearchCriteria("precioMax", "<", precioMax.toString()));
+            params.add(new SearchCriteria("precio", "<", precioMax.toString()));
         }
 
         ProductoSpecificationBuilder builder = new ProductoSpecificationBuilder(params);
@@ -216,6 +223,7 @@ public class ProductoController {
 
         return ResponseEntity.ok(productosDto);
     }
+
 
     @Operation(summary = "Agregar un producto al carrito de compras")
     @ApiResponses(value = {

@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProductoService } from '../../services/producto.service';
 import { Location } from '@angular/common';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-producto-form',
@@ -74,12 +75,12 @@ export class ProductoFormComponent implements OnInit {
         .editarProducto(this.productoId!, productoData, this.selectedFile)
         .subscribe({
           next: () => {
-            alert('Producto actualizado correctamente');
+            Swal.fire('Actualizado', 'Producto actualizado correctamente.', 'success');
             this.location.back();
           },
           error: (err) => {
             console.error(err);
-            alert('Error al actualizar el producto');
+            Swal.fire('Error', 'Error al actualizar el producto', 'error');
           },
         });
     } else {
@@ -90,12 +91,12 @@ export class ProductoFormComponent implements OnInit {
         .subscribe({
           next: () => {
             console.log(this.selectedFile);
-            alert('Producto creado correctamente');
+            Swal.fire('Añadido', 'El producto ha sido añadido al carrito.', 'success');
             this.location.back();
           },
           error: (err) => {
             console.error(err);
-            alert('Error al crear el producto');
+            Swal.fire('Error', 'Error al crear el producto', 'error');
           },
         });
     }

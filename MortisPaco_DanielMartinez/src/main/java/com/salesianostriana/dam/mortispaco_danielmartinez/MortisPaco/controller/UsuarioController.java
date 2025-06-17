@@ -208,6 +208,10 @@ public class UsuarioController {
         }
     }
 
+    @GetMapping("/perfil")
+    public ResponseEntity<GetUserDto> getDatosPerfil(@AuthenticationPrincipal Usuario userAuth) {
+        return ResponseEntity.status(HttpStatus.OK).body(GetUserDto.of(userAuth));
+    }
 
 
 }

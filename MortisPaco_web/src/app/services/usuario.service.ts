@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
-import { UsuarioResponse } from '../interfaces/usuario/usuario.interfaces';
+import { UsuarioDetailResponse, UsuarioResponse } from '../interfaces/usuario/usuario.interfaces';
 import { VentaResponse } from '../interfaces/venta/venta.interface';
 
 @Injectable({
@@ -27,6 +27,10 @@ export class UsuarioService {
   getHistorial(): Observable<VentaResponse> {
   return this.http.get<VentaResponse>(`${environment.apiBaseUrl}/usuario/historial`);
 }
+
+  getUsuarioDetail(): Observable<UsuarioDetailResponse> {
+    return this.http.get<UsuarioDetailResponse>(`${environment.apiBaseUrl}/usuario/perfil`);
+  }
 
 
   refreshToken(): Observable<UsuarioResponse> {

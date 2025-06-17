@@ -11,6 +11,7 @@ public record EditUserCmd(
         String nombre,
         String apellidos,
         String direccion,
-        String password
+        String password,
+        String verifyPassword
 ) {
 }

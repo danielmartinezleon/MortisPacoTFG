@@ -99,6 +99,8 @@ public class UsuarioService {
         });
     }
 
+
+
     public String generateRandomActivationCode() {
         return UUID.randomUUID().toString();
     }

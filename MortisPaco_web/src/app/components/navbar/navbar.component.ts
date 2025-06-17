@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { UsuarioService } from '../../services/usuario.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-navbar',
@@ -7,6 +8,9 @@ import { UsuarioService } from '../../services/usuario.service';
   styleUrl: './navbar.component.css'
 })
 export class NavbarComponent {
+
+  searchTerm: string = '';
+
 
   get userRole(): string | null {
     return localStorage.getItem('userRole');
@@ -16,7 +20,18 @@ export class NavbarComponent {
     return localStorage.getItem('username');
   }
 
-  constructor(private usuarioService: UsuarioService) {}
+  constructor(private usuarioService: UsuarioService,
+              private router: Router
+  ) {}
+
+  onSearch(): void {
+  if (this.searchTerm.trim()) {
+    this.router.navigate(['/productos'], {
+      queryParams: { nombre: this.searchTerm.trim() }
+    });
+  }
+}
+
 
   public logout(): void {
     this.usuarioService.logout();

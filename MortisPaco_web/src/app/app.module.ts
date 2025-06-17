@@ -32,6 +32,7 @@ import { LOCALE_ID } from '@angular/core';
 import { AuthInterceptor } from './interceptors/auth.interceptor';
 import { QuienesSomosComponent } from './components/quienes-somos/quienes-somos.component';
 import { AvisosLegalesComponent } from './components/avisos-legales/avisos-legales.component';
+import { EditarPerfilComponent } from './components/editar-perfil/editar-perfil.component';
 
 
 
@@ -60,7 +61,8 @@ registerLocaleData(localeEs, 'es-ES');
     HistorialComponent,
     DetallesPedidoComponent,
     QuienesSomosComponent,
-    AvisosLegalesComponent
+    AvisosLegalesComponent,
+    EditarPerfilComponent
   ],
   imports: [
     BrowserModule,

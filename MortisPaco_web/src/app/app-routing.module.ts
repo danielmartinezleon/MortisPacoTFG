@@ -13,6 +13,8 @@ import { HistorialComponent } from './components/historial/historial.component';
 import { DetallesPedidoComponent } from './components/detalles-pedido/detalles-pedido.component';
 import { QuienesSomosComponent } from './components/quienes-somos/quienes-somos.component';
 import { AvisosLegalesComponent } from './components/avisos-legales/avisos-legales.component';
+import { PerfilComponent } from './components/perfil/perfil.component';
+import { EditarPerfilComponent } from './components/editar-perfil/editar-perfil.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -31,7 +33,9 @@ const routes: Routes = [
   { path: 'historial', component: HistorialComponent },
   { path: 'detalle/:id', component: DetallesPedidoComponent },
   { path: 'quienessomos', component: QuienesSomosComponent },
-  { path: 'avisoslegales', component: AvisosLegalesComponent }
+  { path: 'avisoslegales', component: AvisosLegalesComponent },
+  { path: 'perfil', component: PerfilComponent },
+  { path: 'perfil/editar', component: EditarPerfilComponent }
 ];
 
 @NgModule({
