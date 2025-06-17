@@ -1,3 +1,5 @@
+version: '3.8'
+
 services:
   pg:
     image: postgres:16-alpine
@@ -30,7 +32,8 @@ services:
       - pgadmin-data:/var/lib/pgadmin
 
   spring-app:
-    build: .
+    build:
+      context: ./MortisPaco_DanielMartinez
     container_name: spring-app
     restart: always
     depends_on:
@@ -42,6 +45,14 @@ services:
       - SPRING_DATASOURCE_PASSWORD=12345678
     ports:
       - "8080:8080"
+
+  angular-app:
+    build:
+      context: ./MortisPaco_web
+    container_name: angular-app
+    restart: always
+    ports:
+      - "4200:80"
 
 volumes:
   pgdata:

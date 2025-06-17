@@ -1,45 +1,50 @@
 <div class="row">
   @if (userRole === 'ADMIN') {
-  <div class="text-center mb-3">
-    <button type="button" class="btn btn-primary" (click)="irACrearProducto()">
-      <i class="bi bi-bag-plus-fill"></i> Agregar Producto
-    </button>
-  </div>
+    <div class="text-center mt-4 mb-3">
+      <button type="button" class="btn btn-primary" (click)="irACrearProducto()">
+        <i class="bi bi-bag-plus-fill"></i> Agregar Producto
+      </button>
+    </div>
+  }
 
-  } @for (p of productos.content; track $index) {
-  <div class="col-md-3">
-    <div class="card my-3 bg-light">
-      <a [routerLink]="['/producto', p.id]">
-        <img
-          [src]="p.imageUrl"
-          class="card-img-top img-fluid"
-          [alt]="p.nombre"
-        />
-      </a>
-      <div class="card-body">
-        <h5 class="card-title">{{ p.nombre }}</h5>
-        <p class="precio">
-          {{ p.precio | currency : "EUR" : "symbol" : "1.2-2" }}
-        </p>
+  @for (p of productos.content; track $index) {
+    <div class="col-md-3 d-flex mb-4">
+      <div class="card my-3 bg-light h-100 d-flex flex-column w-100">
+        <a [routerLink]="['/producto', p.id]">
+          <img
+            [src]="p.imageUrl"
+            class="card-img-top img-fluid"
+            [alt]="p.nombre"
+          />
+        </a>
+        <div class="card-body d-flex flex-column">
+          <h5 class="card-title">{{ p.nombre }}</h5>
+          <p class="precio">
+            {{ p.precio | currency : "EUR" : "symbol" : "1.2-2" }}
+          </p>
 
-        @if (userRole === 'USER') {
-        <button class="btn btn-success" (click)="agregarAlCarrito(p.id)">Añadir a mi cesta</button>
-        } @if (userRole === 'ADMIN') {
-        <div class="btn-group mt-2" role="group">
-          <button class="btn btn-danger" (click)="confirmarEliminacion(p.id)">
-            <i class="bi bi-trash3-fill"></i>
-          </button>
+          <!-- Botones alineados al fondo -->
+          <div class="mt-auto">
+            @if (userRole === 'USER') {
+              <button class="btn btn-success w-100" (click)="agregarAlCarrito(p.id)">Añadir a mi cesta</button>
+            }
+            @if (userRole === 'ADMIN') {
+              <div class="d-flex gap-2 mt-2">
+                <button class="btn btn-danger w-50" (click)="confirmarEliminacion(p.id)">
+                  <i class="bi bi-trash3-fill"></i>
+                </button>
 
-          <a [routerLink]="['/productos/editar', p.id]">
-            <button class="btn btn-primary">
-              <i class="bi bi-pencil-fill"></i>
-            </button>
-          </a>
+                <a [routerLink]="['/productos/editar', p.id]" class="w-50">
+                  <button class="btn btn-primary w-100">
+                    <i class="bi bi-pencil-fill"></i>
+                  </button>
+                </a>
+              </div>
+            }
+          </div>
         </div>
-        }
       </div>
     </div>
-  </div>
   }
 
   <div class="text-center mt-4">

@@ -126,15 +126,18 @@
             </button>
           </form>
         </li>
-        <div class="menu-item-right ms-auto d-flex flex-row">
-          <li class="nav-item login-button" *ngIf="userRole === null">
-            <button class="btn btn-light text-dark" routerLink="/login">
-              <i class="bi bi-door-open"></i> Login
+        <div class="menu-item-right ms-auto d-flex align-items-center gap-2">
+          <li class="nav-item" *ngIf="userRole === null">
+            <button
+              class="btn btn-light text-dark d-flex align-items-center"
+              routerLink="/login"
+            >
+              <i class="bi bi-door-open me-1"></i> Login
             </button>
           </li>
 
           <ng-container *ngIf="userRole === 'USER'">
-            <div class="dropdown">
+            <div class="dropdown d-flex align-items-center">
               <a
                 class="btn btn-light dropdown-toggle"
                 role="button"
@@ -144,7 +147,9 @@
                 {{ username }}
               </a>
               <ul class="dropdown-menu">
-                <li><a class="dropdown-item" routerLink="/perfil">Mi perfil</a></li>
+                <li>
+                  <a class="dropdown-item" routerLink="/perfil">Mi perfil</a>
+                </li>
                 <li>
                   <a class="dropdown-item" routerLink="/historial"
                     >Historial de pedidos</a
@@ -157,13 +162,19 @@
                 </li>
               </ul>
             </div>
-            <li class="nav-item">
-              <a class="nav-link" routerLink="/carrito">Carrito</a>
+
+            <li class="nav-item d-flex align-items-center">
+              <button
+                class="btn btn-light d-flex align-items-center"
+                routerLink="/carrito"
+              >
+                <i class="bi bi-cart-fill me-1"></i> Carrito
+              </button>
             </li>
           </ng-container>
 
           <ng-container *ngIf="userRole === 'ADMIN'">
-            <div class="dropdown">
+            <div class="dropdown d-flex align-items-center">
               <a
                 class="btn btn-light dropdown-toggle"
                 role="button"
@@ -173,7 +184,9 @@
                 {{ username }}
               </a>
               <ul class="dropdown-menu">
-                <li><a class="dropdown-item" routerLink="/perfil">Mi perfil</a></li>
+                <li>
+                  <a class="dropdown-item" routerLink="/perfil">Mi perfil</a>
+                </li>
                 <li>
                   <a class="dropdown-item" routerLink="/historial"
                     >Historial de pedidos</a
