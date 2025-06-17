@@ -6,8 +6,14 @@
 
 ## 🚀 Puesta en marcha
 
-Para ejecutar el proyecto localmente, asegúrate de tener Docker y Docker Compose instalados. Luego, desde la raíz del repositorio, ejecuta:
+Para ejecutar el proyecto localmente, asegúrate de tener Docker y Docker Compose instalados. Luego, ejecuta:
 
+Dentro de la carpeta de web:
+```bash
+npm ci
+npm install
+```
+En la raiz del repositorio:
 ```bash
 docker-compose up --build
 ```
