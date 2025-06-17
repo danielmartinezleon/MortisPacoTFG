@@ -1,0 +1,49 @@
+<div class="container mt-5">
+  <div *ngIf="loading" class="text-center">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Cargando...</span>
+    </div>
+  </div>
+
+  <div *ngIf="!loading && usuario" class="card shadow-lg">
+    <div
+      class="card-header d-flex justify-content-between align-items-center bg-primary text-white"
+    >
+      <h4 class="mb-0">Perfil de Usuario</h4>
+      <button class="btn btn-light btn-sm" [routerLink]="['/perfil/editar']">
+        <i class="bi bi-pencil-fill me-1"></i> Editar perfil
+      </button>
+    </div>
+
+    <div class="card-body p-5">
+      <div class="row">
+        <div class="col-md-6 mb-4">
+          <h6 class="text-muted">Nombre completo</h6>
+          <p class="fs-5">{{ usuario.nombre }} {{ usuario.apellidos }}</p>
+        </div>
+        <div class="col-md-6 mb-4">
+          <h6 class="text-muted">Usuario</h6>
+          <p class="fs-5">{{ usuario.username }}</p>
+        </div>
+        <div class="col-md-6 mb-4">
+          <h6 class="text-muted">Correo electrónico</h6>
+          <p class="fs-5">
+            <i class="bi bi-envelope-fill me-2 text-primary"></i>
+            {{ usuario.email }}
+          </p>
+        </div>
+        <div class="col-md-6 mb-4">
+          <h6 class="text-muted">Dirección</h6>
+          <p class="fs-5">
+            <i class="bi bi-house-door-fill me-2 text-primary"></i>
+            {{ usuario.direccion }}
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="!loading && !usuario" class="alert alert-danger mt-3 text-center">
+    No se pudo cargar el perfil del usuario.
+  </div>
+</div>

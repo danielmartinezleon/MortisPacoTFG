@@ -18,6 +18,11 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.List;
 
 @EnableWebSecurity
 @Configuration
@@ -60,16 +65,18 @@ public class SecurityConfig {
         );
 
         http.authorizeHttpRequests(authz -> authz
-                .requestMatchers(HttpMethod.POST, "/usuario/auth/**", "/usuario/auth/refresh/token", "/error", "/usuario/activate/account/").permitAll()
-                .requestMatchers("/h2-console/**", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
-                .requestMatchers("/usuario/editar/**", "/producto/buscar/**", "/usuario/historial/**", "/producto/**").authenticated()
-
                 .requestMatchers(HttpMethod.GET, "/carrito/**").hasRole("USER")
                 .requestMatchers(HttpMethod.PUT, "/carrito/**").hasRole("USER")
                 .requestMatchers(HttpMethod.DELETE, "/carrito/eliminar/**").hasRole("USER")
                 .requestMatchers("/producto/agregar/**").hasRole("USER")
                 .requestMatchers("/categoria/crear", "/categoria/editar/**", "/categoria/eliminar/**",
                         "/producto/crear", "/producto/editar/**", "/categoria/eliminar/**").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.DELETE, "/producto/eliminar/**").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.POST, "/usuario/auth/**", "/usuario/auth/refresh/token", "/error", "/usuario/activate/account/").permitAll()
+                .requestMatchers("/h2-console/**", "/swagger-ui/**", "/v3/api-docs/**", "/producto/lista", "producto/buscar/**", "producto/**", "/download/**", "/imports/**").permitAll()
+                .requestMatchers("/usuario/editar/**", "/producto/buscar/**", "/usuario/historial/**", "/producto/**", "/usuario/perfil").authenticated()
+
+
                 .anyRequest().authenticated()
         );
 
@@ -78,5 +85,22 @@ public class SecurityConfig {
         http.headers(headers -> headers.frameOptions(frameOptions -> frameOptions.disable()));
 
         return http.build();
+    }
+
+    @Bean
+    CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(List.of("http://localhost:4200"));
+        //configuration.setAllowedOriginPatterns(List.of("http://localhost:4200"));
+
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        configuration.setAllowCredentials(true);
+        configuration.setAllowedHeaders(List.of("*"));
+
+        UrlBasedCorsConfigurationSource urlBasedCorsConfigurationSource = new UrlBasedCorsConfigurationSource();
+
+        urlBasedCorsConfigurationSource.registerCorsConfiguration("/**", configuration);
+
+        return urlBasedCorsConfigurationSource;
     }
 }

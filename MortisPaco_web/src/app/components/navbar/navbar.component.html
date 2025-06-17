@@ -1,0 +1,217 @@
+<header class="navbar navbar-expand-lg navbar-dark bg-danger menu">
+  <nav class="container-fluid position-relative">
+    <a class="navbar-brand position-absolute logo" routerLink="/">
+      <img
+        src="/img/Paco.png"
+        alt="logo"
+        class="d-inline-block align-text-top"
+      />
+    </a>
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarNav"
+      aria-controls="navbarNav"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div
+      class="collapse navbar-collapse d-flex flex-row items-menu"
+      id="navbarNav"
+    >
+      <ul class="navbar-nav position-menu">
+        <li class="nav-item">
+          <div class="dropdown">
+            <button
+              class="btn btn-danger dropdown-toggle"
+              type="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              <img src="/img/espadas.png" alt="Armas" class="me-1" />
+              Armas
+            </button>
+            <ul class="dropdown-menu">
+              <li>
+                <a
+                  class="dropdown-item"
+                  [routerLink]="['/productos/categoria', 'Melee']"
+                  (click)="reloadAfterNavigation()"
+                  >Melee</a
+                >
+              </li>
+              <li>
+                <a
+                  class="dropdown-item"
+                  [routerLink]="['/productos/categoria', 'Distancia']"
+                  (click)="reloadAfterNavigation()"
+                  >Distancia</a
+                >
+              </li>
+            </ul>
+          </div>
+        </li>
+        <li class="nav-item">
+          <div class="dropdown">
+            <button
+              class="btn btn-danger dropdown-toggle"
+              type="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              <img src="/img/casco.png" alt="Armaduras" class="me-1" />
+              Armaduras
+            </button>
+            <ul class="dropdown-menu">
+              <li>
+                <a
+                  class="dropdown-item"
+                  [routerLink]="['/productos/categoria', 'Metal']"
+                  (click)="reloadAfterNavigation()"
+                  >Metal</a
+                >
+              </li>
+              <li>
+                <a
+                  class="dropdown-item"
+                  [routerLink]="['/productos/categoria', 'Cuero']"
+                  (click)="reloadAfterNavigation()"
+                  >Cuero</a
+                >
+              </li>
+            </ul>
+          </div>
+        </li>
+        <li class="nav-item">
+          <button
+            class="btn btn-danger nav-link text-white d-flex align-items-center"
+            routerLink="/quienessomos"
+          >
+            <img
+              src="/img/quienes-somos.png"
+              alt="Quienes Somos"
+              class="me-1"
+            />
+            Quienes Somos
+          </button>
+        </li>
+        <li class="nav-item">
+          <button
+            class="btn btn-danger nav-link text-white d-flex align-items-center"
+            routerLink="/avisoslegales"
+          >
+            <img
+              src="/img/avisos-legales.png"
+              alt="Avisos Legales"
+              class="me-1"
+            />
+            Avisos Legales
+          </button>
+        </li>
+        <li class="nav-item d-flex align-items-center ms-3">
+          <form class="d-flex" (ngSubmit)="onSearch()">
+            <input
+              class="form-control me-2"
+              type="search"
+              placeholder="Buscar productos..."
+              aria-label="Buscar"
+              [(ngModel)]="searchTerm"
+              name="search"
+            />
+            <button class="btn btn-light" type="submit">
+              <i class="bi bi-search"></i>
+            </button>
+          </form>
+        </li>
+        <div class="menu-item-right ms-auto d-flex align-items-center gap-2">
+          <li class="nav-item" *ngIf="userRole === null">
+            <button
+              class="btn btn-light text-dark d-flex align-items-center"
+              routerLink="/login"
+            >
+              <i class="bi bi-door-open me-1"></i> Login
+            </button>
+          </li>
+
+          <ng-container *ngIf="userRole === 'USER'">
+            <div class="dropdown d-flex align-items-center">
+              <a
+                class="btn btn-light dropdown-toggle"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                {{ username }}
+              </a>
+              <ul class="dropdown-menu">
+                <li>
+                  <a class="dropdown-item" routerLink="/perfil">Mi perfil</a>
+                </li>
+                <li>
+                  <a class="dropdown-item" routerLink="/historial"
+                    >Historial de pedidos</a
+                  >
+                </li>
+                <li>
+                  <a class="dropdown-item" href="#" (click)="logout()"
+                    >Cerrar sesión</a
+                  >
+                </li>
+              </ul>
+            </div>
+
+            <li class="nav-item d-flex align-items-center">
+              <button
+                class="btn btn-light d-flex align-items-center"
+                routerLink="/carrito"
+              >
+                <i class="bi bi-cart-fill me-1"></i> Carrito
+              </button>
+            </li>
+          </ng-container>
+
+          <ng-container *ngIf="userRole === 'ADMIN'">
+            <div class="dropdown d-flex align-items-center">
+              <a
+                class="btn btn-light dropdown-toggle"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                {{ username }}
+              </a>
+              <ul class="dropdown-menu">
+                <li>
+                  <a class="dropdown-item" routerLink="/perfil">Mi perfil</a>
+                </li>
+                <li>
+                  <a class="dropdown-item" routerLink="/historial"
+                    >Historial de pedidos</a
+                  >
+                </li>
+                <li><a class="dropdown-item" href="#">Descuentos</a></li>
+                <li>
+                  <a class="dropdown-item" href="#" (click)="logout()"
+                    >Cerrar sesión</a
+                  >
+                </li>
+              </ul>
+            </div>
+          </ng-container>
+        </div>
+      </ul>
+    </div>
+  </nav>
+</header>
+
+<!--<nav class="navbar">
+  <a routerLink="/">Inicio</a>
+  <a routerLink="/productos">Productos</a>
+  <a routerLink="/categorias">Categorías</a>
+  <a routerLink="/carrito">Carrito</a>
+  <a routerLink="/login">Login</a>
+  <a routerLink="/registro">Registro</a>
+</nav>-->

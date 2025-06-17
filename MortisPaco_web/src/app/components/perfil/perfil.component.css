@@ -1,0 +1,17 @@
+.card {
+  width: 100%;
+  border-radius: 1rem;
+}
+
+.card-body {
+  background-color: #fff;
+}
+
+h6 {
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.fs-5 {
+  font-size: 1.25rem;
+}

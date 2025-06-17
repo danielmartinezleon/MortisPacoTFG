@@ -46,15 +46,17 @@ public class ProductoService {
     public Producto createProducto(CreateProductoCmd cmd, MultipartFile file) {
         Categoria c = categoriaRepository.findById(cmd.categoriaId())
                 .orElseThrow(() -> new EntityNotFoundException("Categoria no encontrada"));
-
+        System.out.println("producto creado con imagen: "+file);
         FileMetadata fileMetadata = storageService.store(file);
+
+        String prefixedFilename = "/imports/" + fileMetadata.getFilename();
 
         Producto p = Producto.builder()
                 .nombre(cmd.nombre())
                 .descripcion(cmd.descripcion())
                 .stock(cmd.stock())
                 .precio(cmd.precio())
-                .imagen(fileMetadata.getFilename())
+                .imagen(prefixedFilename)
                 .categoria(c)
                 .descuento(cmd.descuento())
                 .build();
@@ -66,11 +68,14 @@ public class ProductoService {
         return productoRepository.findAll(pageable);
     }
 
+
+
     @Transactional
     public Optional<Producto> editProducto(UUID id, EditProductoCmd cmd, MultipartFile file) {
         return productoRepository.findById(id).map(producto -> {
             Categoria categoria = categoriaRepository.findById(cmd.categoriaId())
                     .orElseThrow(() -> new EntityNotFoundException("Categoría no encontrada"));
+
 
             producto.setNombre(cmd.nombre());
             producto.setDescripcion(cmd.descripcion());
@@ -82,7 +87,8 @@ public class ProductoService {
             // Si se envía una nueva imagen, la actualizamos
             if (file != null && !file.isEmpty()) {
                 FileMetadata fileMetadata = storageService.store(file);
-                producto.setImagen(fileMetadata.getFilename());
+                String prefixedFilename = "/imports/" + fileMetadata.getFilename();
+                producto.setImagen(prefixedFilename);
             }
 
             return productoRepository.save(producto);
@@ -93,7 +99,6 @@ public class ProductoService {
         if (!productoRepository.existsById(id)) {
             throw new EntityNotFoundException("Producto no encontrado");
         }
-        storageService.deleteFile(productoRepository.findById(id).get().getImagen());
         productoRepository.deleteById(id);
     }
 
@@ -102,8 +107,11 @@ public class ProductoService {
     }
 
     @Transactional
-    public GetVentaDto agregarProductoAlCarrito(UUID usuarioId, UUID productoId, int cantidad) {
-        Usuario usuario = usuarioRepository.findById(usuarioId).get();
+    public GetVentaDto agregarProductoAlCarrito(Usuario usuarioAuth, UUID productoId, int cantidad) {
+        System.out.println("usuarioAuth: "+usuarioAuth);
+        Usuario usuario = usuarioRepository.findById(usuarioAuth.getId())
+                .orElseThrow(() -> new EntityNotFoundException("Usuario no encontrado"));
+
         Venta venta = usuario.getVentas().stream()
                 .filter(Venta::isAbierta)
                 .findFirst()
@@ -148,56 +156,60 @@ public class ProductoService {
     }
 
     @Transactional
-    public GetVentaDto obtenerCarrito(UUID usuarioId) {
-        Usuario usuario = usuarioRepository.findById(usuarioId)
+    public GetVentaDto obtenerCarrito(Usuario usuarioAuth) {
+        Usuario usuario = usuarioRepository.findById(usuarioAuth.getId())
                 .orElseThrow(() -> new EntityNotFoundException("Usuario no encontrado"));
 
         Venta venta = ventaRepository.findByClienteAndAbiertaTrue(usuario);
+
+        if (venta == null) {
+            return GetVentaDto.of(new Venta());
+        }
 
         return GetVentaDto.of(venta);
     }
 
 
+
     @Transactional
-    public GetVentaDto eliminarProductoDelCarrito(UUID ventaId, UUID lineaVentaId) {
-        Venta venta = ventaRepository.findById(ventaId)
-                .orElseThrow(() -> new EntityNotFoundException("Venta no encontrada"));
+    public GetVentaDto eliminarProductoDelCarrito(Usuario usuarioAuth, UUID lineaVentaId) {
+        Usuario usuario = usuarioRepository.findById(usuarioAuth.getId())
+                .orElseThrow(() -> new EntityNotFoundException("Usuario no encontrado"));
 
-        if(venta.isAbierta()) {
-            Optional<LineaVenta> lineaVentaOpt = venta.getLineas().stream()
-                    .filter(linea -> linea.getId().equals(lineaVentaId))
-                    .findFirst();
+        Venta venta = usuario.getVentas().stream()
+                .filter(Venta::isAbierta)
+                .findFirst()
+                .orElseThrow(() -> new EntityNotFoundException("No hay venta abierta"));
 
-            if (lineaVentaOpt.isPresent()) {
-                LineaVenta lineaVenta = lineaVentaOpt.get();
-                venta.getLineas().remove(lineaVenta);
+        LineaVenta lineaVenta = venta.getLineas().stream()
+                .filter(linea -> linea.getId().equals(lineaVentaId))
+                .findFirst()
+                .orElseThrow(() -> new EntityNotFoundException("La línea de venta no está en el carrito"));
 
-                venta.setImporteTotal(venta.getLineas().stream()
+        venta.getLineas().remove(lineaVenta);
+
+        venta.setImporteTotal(
+                venta.getLineas().stream()
                         .mapToDouble(LineaVenta::getTotalLinea)
-                        .sum());
+                        .sum()
+        );
 
-                ventaRepository.save(venta);
+        ventaRepository.save(venta);
 
-                return GetVentaDto.of(venta);
-            } else {
-                throw new EntityNotFoundException("La línea de venta no está en el carrito");
-            }
-        } else {
-            throw new EntityNotFoundException("Venta no encontrada");
-        }
-
+        return GetVentaDto.of(venta);
     }
 
 
+
     @Transactional
-    public GetVentaDto cerrarVentaParaUsuario(UUID usuarioId, UUID ventaId) {
-        Usuario usuario = usuarioRepository.findById(usuarioId)
+    public GetVentaDto cerrarVentaParaUsuario(Usuario usuarioAuth, UUID ventaId) {
+        Usuario usuario = usuarioRepository.findById(usuarioAuth.getId())
                 .orElseThrow(() -> new EntityNotFoundException("Usuario no encontrado"));
 
         Venta venta = ventaRepository.findById(ventaId)
                 .orElseThrow(() -> new EntityNotFoundException("Venta no encontrada"));
 
-        if (!venta.getCliente().getId().equals(usuarioId)) {
+        if (!venta.getCliente().getId().equals(usuarioAuth.getId())) {
             throw new IllegalStateException("La venta no pertenece al usuario");
         }
 

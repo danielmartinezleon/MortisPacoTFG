@@ -58,6 +58,12 @@ public abstract class GenericSpecificationBuilder<U> {
                             "%" + criteria.value() + "%"
                     );
 
+                case "nombre":
+                    return builder.like(
+                            builder.lower(root.get("nombre")),
+                            "%" + criteria.value().toString().toLowerCase() + "%"
+                    );
+
                 default:
                     if (criteria.operation().equalsIgnoreCase(">")) {
                         return builder.greaterThanOrEqualTo(
@@ -72,8 +78,8 @@ public abstract class GenericSpecificationBuilder<U> {
                     } else if (criteria.operation().equalsIgnoreCase(":")) {
                         if (root.get(criteria.key()).getJavaType() == String.class) {
                             return builder.like(
-                                    root.get(criteria.key()),
-                                    "%" + criteria.value() + "%"
+                                    builder.lower(root.get(criteria.key())),
+                                    "%" + criteria.value().toString().toLowerCase() + "%"
                             );
                         } else {
                             return builder.equal(root.get(criteria.key()), criteria.value());
@@ -83,4 +89,5 @@ public abstract class GenericSpecificationBuilder<U> {
             return null;
         };
     }
+
 }

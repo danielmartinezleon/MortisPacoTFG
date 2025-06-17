@@ -5,6 +5,7 @@ import com.salesianostriana.dam.mortispaco_danielmartinez.MortisPaco.dto.product
 import com.salesianostriana.dam.mortispaco_danielmartinez.MortisPaco.dto.producto.GetProductoDto;
 import com.salesianostriana.dam.mortispaco_danielmartinez.MortisPaco.dto.ventas.GetVentaDto;
 import com.salesianostriana.dam.mortispaco_danielmartinez.MortisPaco.model.Producto;
+import com.salesianostriana.dam.mortispaco_danielmartinez.MortisPaco.model.Usuario;
 import com.salesianostriana.dam.mortispaco_danielmartinez.MortisPaco.query.ProductoSpecificationBuilder;
 import com.salesianostriana.dam.mortispaco_danielmartinez.MortisPaco.service.ProductoService;
 import com.salesianostriana.dam.mortispaco_danielmartinez.MortisPaco.util.SearchCriteria;
@@ -24,12 +25,14 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @RestController
@@ -73,6 +76,7 @@ public class ProductoController {
         Page<GetProductoDto> productosDto = productos.map(p -> GetProductoDto.of(p, getImageUrl(p.getImagen())));
         return ResponseEntity.ok(productosDto);
     }
+
 
     @Operation(summary = "Obtener un producto por su ID")
     @ApiResponses(value = {
@@ -185,6 +189,7 @@ public class ProductoController {
     @GetMapping("/buscar/")
     public ResponseEntity<Page<GetProductoDto>> buscar(
             @RequestParam(value = "categoria", required = false) String categoria,
+            @RequestParam(value = "nombre", required = false) String nombre,
             @RequestParam(value = "precioMin", required = false) Double precioMin,
             @RequestParam(value = "precioMax", required = false) Double precioMax,
             @RequestParam(value = "page", defaultValue = "0") int page,
@@ -195,11 +200,17 @@ public class ProductoController {
         if (categoria != null) {
             params.add(new SearchCriteria("categoria", ":", categoria));
         }
+        if (nombre != null) {
+            params.add(new SearchCriteria("nombre", ":", nombre));
+        }
+        if (nombre != null && !nombre.trim().isEmpty()) {
+            params.add(new SearchCriteria("nombre", "like", nombre.trim()));
+        }
         if (precioMin != null) {
-            params.add(new SearchCriteria("precioMin", ">", precioMin.toString()));
+            params.add(new SearchCriteria("precio", ">", precioMin.toString()));
         }
         if (precioMax != null) {
-            params.add(new SearchCriteria("precioMax", "<", precioMax.toString()));
+            params.add(new SearchCriteria("precio", "<", precioMax.toString()));
         }
 
         ProductoSpecificationBuilder builder = new ProductoSpecificationBuilder(params);
@@ -212,6 +223,7 @@ public class ProductoController {
 
         return ResponseEntity.ok(productosDto);
     }
+
 
     @Operation(summary = "Agregar un producto al carrito de compras")
     @ApiResponses(value = {
@@ -229,18 +241,18 @@ public class ProductoController {
     })
     @PostMapping("/agregar/{productoId}")
     public ResponseEntity<GetVentaDto> agregarProductoAlCarrito(
-            @RequestParam UUID usuarioId,
+            @AuthenticationPrincipal Usuario usuario,
             @PathVariable UUID productoId,
             @RequestParam int cantidad) {
-
-        GetVentaDto ventaActualizada = productoService.agregarProductoAlCarrito(usuarioId, productoId, cantidad);
+        System.out.println("usuario: "+usuario);
+        GetVentaDto ventaActualizada = productoService.agregarProductoAlCarrito(usuario, productoId, cantidad);
         return ResponseEntity.ok(ventaActualizada);
     }
 
 
+
     public String getImageUrl(String filename) {
         return ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path("/download/")
                 .path(filename)
                 .toUriString();
     }

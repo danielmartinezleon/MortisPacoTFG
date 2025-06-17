@@ -1,0 +1,45 @@
+<form [formGroup]="productoForm" (ngSubmit)="onSubmit()" enctype="multipart/form-data">
+  <div class="mb-3">
+    <label for="nombre" class="form-label">Nombre:</label>
+    <input type="text" class="form-control" id="nombre" formControlName="nombre" required />
+  </div>
+
+  <div class="mb-3">
+    <label for="descripcion" class="form-label">Descripción:</label>
+    <textarea class="form-control" id="descripcion" formControlName="descripcion" rows="3" required></textarea>
+  </div>
+
+  <div class="mb-3">
+    <label for="stock" class="form-label">Stock:</label>
+    <input type="number" class="form-control" id="stock" formControlName="stock" required />
+  </div>
+
+  <div class="mb-3">
+    <label for="precio" class="form-label">Precio:</label>
+    <input type="number" class="form-control" id="precio" formControlName="precio" step="0.01" min="0" required />
+  </div>
+
+  <div class="mb-3">
+    <label for="categoria" class="form-label">Categoría:</label>
+    <select class="form-select" id="categoria" formControlName="categoriaId" required>
+      <option value="e6f28455-bbdb-4aae-a443-fb07f938ff3d">Melee</option>
+      <option value="cbf3b10c-5c97-4a3e-8421-3812b3a89927">Distancia</option>
+      <option value="81c049fb-d020-4941-b633-87f040ab4cb8">Metal</option>
+      <option value="8f8cc2cc-b9ca-4a1a-b654-2e2f23462f0c">Cuero</option>
+    </select>
+  </div>
+
+  <div class="mb-3">
+    <label for="imagen" class="form-label">Imagen:</label>
+    <input type="file" class="form-control" id="imagen" (change)="onFileChange($event)" required />
+  </div>
+
+  <div class="form-check mb-3">
+    <input class="form-check-input" type="checkbox" id="descuento" formControlName="descuento" />
+    <label class="form-check-label" for="descuento">Descuento</label>
+  </div>
+
+  <div class="d-grid gap-2">
+    <button type="submit" class="btn btn-primary">Guardar producto</button>
+  </div>
+</form>

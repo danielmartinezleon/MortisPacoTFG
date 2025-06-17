@@ -6,6 +6,7 @@ import com.salesianostriana.dam.mortispaco_danielmartinez.MortisPaco.model.Role;
 import com.salesianostriana.dam.mortispaco_danielmartinez.MortisPaco.model.Usuario;
 import com.salesianostriana.dam.mortispaco_danielmartinez.MortisPaco.security.jwt.access.JwtService;
 import com.salesianostriana.dam.mortispaco_danielmartinez.MortisPaco.security.jwt.refresh.RefreshToken;
+import com.salesianostriana.dam.mortispaco_danielmartinez.MortisPaco.security.jwt.refresh.RefreshTokenRequest;
 import com.salesianostriana.dam.mortispaco_danielmartinez.MortisPaco.security.jwt.refresh.RefreshTokenService;
 import com.salesianostriana.dam.mortispaco_danielmartinez.MortisPaco.service.UsuarioService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -117,6 +118,14 @@ public class UsuarioController {
                 .body(UserResponse.of(user, accessToken, refreshToken.getToken()));
     }
 
+    @PostMapping("/auth/refresh/token")
+    public ResponseEntity<?> refreshToken(@RequestBody RefreshTokenRequest req) {
+        System.out.println("Received refresh token: " + req.refreshToken());
+        String token = req.refreshToken();
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(refreshTokenService.refreshToken(token));
+    }
+
     @PostMapping("/auth/logout")
     public ResponseEntity<?> logout(@AuthenticationPrincipal Usuario user) {
         refreshTokenService.deleteByUser(user);
@@ -186,25 +195,22 @@ public class UsuarioController {
                                     """))),
             @ApiResponse(responseCode = "404", description = "Usuario no encontrado", content = @Content)
     })
-    @GetMapping("/historial/{usuarioId}")
-    public ResponseEntity<List<GetVentaDto>> getVentasCerradasPorUsuario(@PathVariable UUID usuarioId) {
-        Usuario usuario = usuarioService.findById(usuarioId);
 
-        if (usuario.getRoles().contains(Role.ADMIN)) {
-            List<GetVentaDto> ventas = usuarioService.getVentasCerradas();
-            return ResponseEntity.status(HttpStatus.OK).body(ventas);
+    @GetMapping("/historial")
+    public ResponseEntity<List<GetVentaDto>> getVentasCerradas(@AuthenticationPrincipal Usuario usuarioAuth) {
+        try {
+            List<GetVentaDto> ventas = usuarioService.getVentasCerradas(usuarioAuth);
+            return ResponseEntity.ok(ventas);
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
 
-        } else if (usuario.getRoles().contains(Role.USER)) {
-            try {
-                List<GetVentaDto> ventas = usuarioService.getVentasCerradasPorUsuario(usuarioId);
-                return ResponseEntity.status(HttpStatus.OK).body(ventas);
-            } catch (EntityNotFoundException e) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-            }
-        }
-        else {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
-        }
+    @GetMapping("/perfil")
+    public ResponseEntity<GetUserDto> getDatosPerfil(@AuthenticationPrincipal Usuario userAuth) {
+        return ResponseEntity.status(HttpStatus.OK).body(GetUserDto.of(userAuth));
     }
 
 

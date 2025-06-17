@@ -1,0 +1,28 @@
+.logo {
+    top: -25px;
+}
+
+.items-menu {
+    position: absolute;
+    left: 140px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 90%;
+}
+
+.menu{
+    height: 75px;
+    z-index: 1000;
+}
+
+.position-menu {
+    width: 90%;
+}
+
+.dropdown-menu {
+  z-index: 1050 !important;
+}
+
+.login-button {
+    justify-content: end;
+}

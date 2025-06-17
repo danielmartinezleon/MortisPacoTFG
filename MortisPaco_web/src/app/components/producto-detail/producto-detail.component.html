@@ -1,0 +1,24 @@
+<main class="flex-grow-1" style="margin-top: 56px;">
+  <div class="container mt-5" *ngIf="producto">
+    <div class="row">
+      <div class="col-md-6 mb-4">
+        <img [src]="producto.imageUrl" class="img-fluid" alt="Imagen del producto">
+      </div>
+      <div class="col-md-6">
+        <h2>{{ producto.nombre }}</h2>
+        <p>{{ producto.descripcion }}</p>
+
+        @if (userRole === 'USER') {
+          <div class="mb-3">
+            <label for="cantidad">Cantidad:</label>
+            <input type="number" id="cantidad" name="cantidad" [(ngModel)]="cantidadInput" value="1" min="1" class="form-control">
+          </div>
+        }
+          <h2>PRECIO: {{ producto.precio | number:'1.2-2' }}€</h2>
+          @if (userRole === 'USER') {
+            <button type="button" class="btn btn-success" (click)="agregarAlCarrito(cantidadInput)">Añadir a mi cesta</button>
+          }
+      </div>
+    </div>
+  </div>
+</main>

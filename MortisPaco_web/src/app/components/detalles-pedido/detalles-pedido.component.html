@@ -1,0 +1,33 @@
+<main class="flex-grow-1" style="margin-top: 100px;">
+  <div class="container">
+    <h1 class="mt-5">Detalles del Pedido</h1>
+
+    <div *ngIf="loading" class="alert alert-info">Cargando pedido...</div>
+    <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+
+    <div *ngIf="pedido">
+      <h3>Pedido ID: <span>{{ pedido.id }}</span></h3>
+      <p>Fecha: <span>{{ pedido.fecha | date: 'dd/MM/yyyy' }}</span></p>
+      <p>Importe Total: <span>{{ pedido.importeTotal | currency:'EUR' }}</span></p>
+      <p>Gastos de Envío: <span>{{ pedido.gastosEnvio | currency:'EUR' }}</span></p>
+
+      <h4>Productos</h4>
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">Producto</th>
+            <th scope="col">Cantidad</th>
+            <th scope="col">Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let linea of pedido.lineas">
+            <td>{{ linea.nombreProducto }}</td>
+            <td>{{ linea.cantidad }}</td>
+            <td>{{ linea.totalLinea | currency:'EUR' }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</main>
